@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TicTacToeClient.Properties {
+namespace TicTacToeClient.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace TicTacToeClient.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class ClientResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal ClientResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace TicTacToeClient.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TicTacToeClient.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TicTacToeClient.Resources.ClientResources", typeof(ClientResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,22 @@ namespace TicTacToeClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Game Over.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string GameOverMessageTitle {
+        internal static System.Drawing.Bitmap tic_tac_toe_O {
             get {
-                return ResourceManager.GetString("GameOverMessageTitle", resourceCulture);
+                object obj = ResourceManager.GetObject("tic_tac_toe_O", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tic_tac_toe_X {
+            get {
+                object obj = ResourceManager.GetObject("tic_tac_toe_X", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
