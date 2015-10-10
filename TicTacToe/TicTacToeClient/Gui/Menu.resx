@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>Welcome to Michael's Super Awesome TicTacToe Game!  At this point you really have two options... Would you rather play online with your friends or offline with a friend or against the bot created. YOU CHOOSE!!!</value>
+  </data>
 </root>

@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game Components\Board.cs" />
+    <Compile Include="Game Components\FieldItem.cs" />
     <Compile Include="Gui\Menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +67,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ClientResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Enums\SpaceTypes.cs" />
     <EmbeddedResource Include="Resources\ClientResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ClientResources.Designer.cs</LastGenOutput>
@@ -104,6 +107,7 @@
   <ItemGroup>
     <None Include="Resources\tic-tac-toe-X.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
