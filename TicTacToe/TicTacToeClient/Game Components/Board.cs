@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicTacToeClient.Resources;
 
-namespace TicTacToeClient
+namespace TicTacToeClient.Game_Components
 {
     class Board
     {
+        
         private readonly SpaceTypes[,] _fieldSpaces = new SpaceTypes[3, 3];
         private readonly List<FieldItem> _openFieldPlaces = new List<FieldItem>();
         private readonly Graphics _graphics;
@@ -17,6 +15,10 @@ namespace TicTacToeClient
         public event EventHandler GameOver;
         private readonly Random _random = new Random();
 
+        /// <summary>
+        /// Constructor called that clears the field and also draws the board. 
+        /// </summary>
+        /// <param name="g">The Graphics of the panel it draws on.</param>
         public Board(Graphics g)
         {
             _graphics = g;
@@ -24,6 +26,12 @@ namespace TicTacToeClient
             DrawField();
         }
 
+        /// <summary>
+        /// Method used to play any space on the board.
+        /// </summary>
+        /// <param name="type">SpaceType that is being played.</param>
+        /// <param name="playedSpace">The position of the requested play space.</param>
+        /// <returns>Returns true if space open and played, otherwise false if space is take</returns>
         public bool PlaySpace(SpaceTypes type, FieldItem playedSpace)
         {
             if (playedSpace.Posion.X == 4 || playedSpace.Posion.Y == 4 ||
@@ -45,7 +53,9 @@ namespace TicTacToeClient
             FieldItem played = _openFieldPlaces[index];
             PlaySpace(aiType, played);
             DrawField();
+            //TODO: Add counter moves and AI Logic
         }
+
         /// <summary>
         /// Method use to draw the bounds of the field and also current tiles on the field.
         /// </summary>
@@ -108,7 +118,7 @@ namespace TicTacToeClient
         /// <summary>
         /// Method used to reset the game and clear the field.
         /// </summary>
-        private void ClearField()
+        public void ClearField()
         {
             _openFieldPlaces.Clear();
             for (int i = 0; i < 3; i++)
@@ -117,7 +127,9 @@ namespace TicTacToeClient
                     _fieldSpaces[i, j] = SpaceTypes.Open;
                     _openFieldPlaces.Add(new FieldItem(i, j));
                 }
+            DrawField();
         }
+
         /// <summary>
         /// Method used to check the board if anyone has one,
         /// will also detect a draw.

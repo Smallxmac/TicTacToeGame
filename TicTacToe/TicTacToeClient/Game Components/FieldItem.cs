@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
-namespace TicTacToeClient
+namespace TicTacToeClient.Game_Components
 {
     /// <summary>
     /// Used to show the field items within the game board.

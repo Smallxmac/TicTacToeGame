@@ -117,4 +117,13 @@
   <data name="GameOverMessageTitle" xml:space="preserve">
     <value>Game Over</value>
   </data>
+  <data name="Gameover.Lost" xml:space="preserve">
+    <value>It seems as though Player One has lost. Would you like to play again?</value>
+  </data>
+  <data name="GameOver.Draw" xml:space="preserve">
+    <value>Whoa it was a draw. Would you like to play again?</value>
+  </data>
+  <data name="GameOver.Win" xml:space="preserve">
+    <value>Player One has won! Would you like to play again?</value>
+  </data>
 </root>

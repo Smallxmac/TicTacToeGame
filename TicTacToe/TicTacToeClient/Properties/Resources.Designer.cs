@@ -61,6 +61,33 @@ namespace TicTacToeClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Whoa it was a draw. Would you like to play again?.
+        /// </summary>
+        internal static string GameOver_Draw {
+            get {
+                return ResourceManager.GetString("GameOver.Draw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It seems as though Player One has lost. Would you like to play again?.
+        /// </summary>
+        internal static string Gameover_Lost {
+            get {
+                return ResourceManager.GetString("Gameover.Lost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player One has won! Would you like to play again?.
+        /// </summary>
+        internal static string GameOver_Win {
+            get {
+                return ResourceManager.GetString("GameOver.Win", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Game Over.
         /// </summary>
         internal static string GameOverMessageTitle {

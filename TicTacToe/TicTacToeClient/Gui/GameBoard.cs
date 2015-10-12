@@ -1,48 +1,69 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using TicTacToeClient.Game_Components;
 
 namespace TicTacToeClient.Gui
 {
     public partial class GameBoard : Form
     {
-
         #region Private Variables
+
+        //Game Objects
         private Graphics _graphics;
         private Board _playingBoard;
+        //Game Information
         private bool _aiTurn;
         private bool _twoPlayers;
         private SpaceTypes _aiType;
         private SpaceTypes _playerType;
- 
+        //Player Scores
         private int _rounds;
         private int _playerWins;
         private int _aiWins;
+        private int _roundsPlayed;
+
         #endregion
+        #region GameUI
+
+        /// <summary>
+        /// Constructor that also sets the size of the form to the menu size.
+        /// </summary>
         public GameBoard()
         {
             InitializeComponent();
             Size = new Size(528, 217);
         }
-        
 
+        /// <summary>
+        /// Method called in order to get all of the values from the
+        /// menu portion of this UI and begin the game.
+        /// </summary>
         private void StartGame()
         {
             _playingBoard = new Board(_graphics);
             _playingBoard.GameOver += GameOver;
-            _playerType = (SpaceTypes) Enum.Parse(typeof (SpaceTypes), playerSpaceType.Text);
+            _playerType = (SpaceTypes)Enum.Parse(typeof(SpaceTypes), playerSpaceType.Text);
             _aiType = playerSpaceType.Text == @"X" ? SpaceTypes.O : SpaceTypes.X;
-            _rounds = (int) roundCount.Value;
+            _rounds = (int)roundCount.Value;
             _twoPlayers = typeBox.Text == @"Player Vs Player";
             _aiWins = 0;
             _playerWins = 0;
+            _roundsPlayed = 1;
+            roundLable.Text = $"Round {_roundsPlayed} out of {_rounds}";
             if (firstTurn.Checked) return;
             _aiTurn = true;
             turnLable.Text = @"Current Turn: Player 2";
-            if(!_twoPlayers)
+            if (!_twoPlayers)
                 _playingBoard.AiMove(_aiType);
         }
 
+        /// <summary>
+        /// (Called from Event) Called at the creation of the UI,
+        /// used past the graphic controller to the Board class.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void gamePanel_Paint(object sender, PaintEventArgs e)
         {
             _graphics = gamePanel.CreateGraphics();
@@ -50,35 +71,63 @@ namespace TicTacToeClient.Gui
 
 
         /// <summary>
-        /// Method used to show that the game has ended, will also 
-        /// ask the user if they wish to play again.
+        /// (Called from Event) Method used to determine the winner
+        ///  and if to start the next round.
         /// </summary>
-        /// <param name="winner">The winner of the game (Open for draw)</param>
+        /// <param name="sender">The winner as SpaceType. Open for draw.</param>
+        /// <param name="eventArgs">Not used.</param>
         private void GameOver(object sender, EventArgs eventArgs)
         {
-            //TODO: Add in rounds and not just close it right when someone wins LOL
-            //SpaceTypes winner = (SpaceTypes) sender;
-            //if (_rounds == _aiWins + _playerWins)
-            //{
-            //    Application.Exit();
-            //}
-            //DialogResult reply = DialogResult.None;
-            //if (winner == _aiType)
-            //    reply = MessageBox.Show(this, "Sadly you have lost, would you like to play again?", Properties.Resources.GameOverMessageTitle,
-            //        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //if (winner == _playerType)
-            //    reply = MessageBox.Show(this, "Awesome you won, would you like to play again?", Properties.Resources.GameOverMessageTitle,
-            //        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //if (winner == SpaceTypes.Open)
-            //    reply = MessageBox.Show(this, "Whoa it was a draw, would you like to play again?", Properties.Resources.GameOverMessageTitle,
-            //        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //if (reply == DialogResult.No)
-            //    Application.Exit();
-            //if (reply == DialogResult.Yes)
-            //{
-            //    Application.Exit();
-            //}
-            Close();
+            SpaceTypes winner = (SpaceTypes)sender;
+
+            if (_aiType == winner)
+                _aiWins++;
+            else if (winner == SpaceTypes.Open)
+            {
+                _aiWins++;
+                _playerWins++;
+            }
+            else
+                _playerWins++;
+
+            if (_rounds == _roundsPlayed)
+            {
+                DialogResult reply;
+                //Player Win
+                if (_playerWins > _aiWins)
+                    reply = MessageBox.Show(this, Properties.Resources.GameOver_Win,
+                        Properties.Resources.GameOverMessageTitle,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                //Draw
+                else if (_playerWins == _aiWins)
+                    reply = MessageBox.Show(this, Properties.Resources.GameOver_Draw,
+                        Properties.Resources.GameOverMessageTitle,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                //Player Lose
+                else
+                    reply = MessageBox.Show(this, Properties.Resources.Gameover_Lost,
+                        Properties.Resources.GameOverMessageTitle,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (reply == DialogResult.No)
+                {
+                    Close();
+                    return;
+                }
+                if (reply == DialogResult.Yes)
+                {
+                    menuPanel.Visible = true;
+                    gamePanel.Visible = false;
+                    Size = new Size(528, 217);
+                }
+            }
+            else
+                _roundsPlayed++;
+            _playingBoard.ClearField();
+            roundLable.Text = $"Round {_roundsPlayed} out of {_rounds}";
+            if (firstTurn.Checked && _aiTurn)
+                _aiTurn = false;
+
         }
 
         /// <summary>
@@ -119,17 +168,26 @@ namespace TicTacToeClient.Gui
                 if (!_playingBoard.PlaySpace(playedType, playedSpace)) return;
                 _aiTurn = true;
                 _playingBoard.AiMove(_aiType);
+                _aiTurn = false;
             }
         }
+        #endregion
+        #region MenuUI
 
-
+        /// <summary>
+        /// (Called from Event) Event called when the menuUI's 
+        /// begin button is click. Will switch UI from menu to game
+        /// and call StartGame().
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BeginButtonClick(object sender, EventArgs e)
         {
             menuPanel.Visible = false;
             gamePanel.Visible = true;
             Size = new Size(640,680);
             StartGame();
-            //collect data
         }
+        #endregion
     }
 }
