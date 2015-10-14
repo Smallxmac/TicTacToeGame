@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using TicTacToeClient.Enums;
 using TicTacToeClient.Game_Components;
 
 namespace TicTacToeClient.Gui
@@ -41,7 +42,9 @@ namespace TicTacToeClient.Gui
         /// </summary>
         private void StartGame()
         {
-            _playingBoard = new Board(_graphics);
+            _playingBoard = botDifficulty.Text == ""
+                ? new Board(_graphics, BotDifficulty.Random)
+                : new Board(_graphics, (BotDifficulty) Enum.Parse(typeof (BotDifficulty), botDifficulty.Text));
             _playingBoard.GameOver += GameOver;
             _playerType = (SpaceTypes)Enum.Parse(typeof(SpaceTypes), playerSpaceType.Text);
             _aiType = playerSpaceType.Text == @"X" ? SpaceTypes.O : SpaceTypes.X;
@@ -188,6 +191,20 @@ namespace TicTacToeClient.Gui
             Size = new Size(640,680);
             StartGame();
         }
+
+        /// <summary>
+        /// (Called from Event) Event called when the game mode box is changed
+        /// it will  enable or disable the difficulty selection.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void typeBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            botDifficulty.Enabled = typeBox.Text != @"Player Vs Player";
+        }
+
         #endregion
+
+        
     }
 }

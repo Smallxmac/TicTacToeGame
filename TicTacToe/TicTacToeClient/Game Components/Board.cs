@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using TicTacToeClient.Enums;
 using TicTacToeClient.Resources;
 
 namespace TicTacToeClient.Game_Components
@@ -14,14 +15,17 @@ namespace TicTacToeClient.Game_Components
         public delegate void GameOverHandler(SpaceTypes winner, EventArgs e);
         public event EventHandler GameOver;
         private readonly Random _random = new Random();
+        private BotDifficulty _botDifficulty;
 
         /// <summary>
         /// Constructor called that clears the field and also draws the board. 
         /// </summary>
         /// <param name="g">The Graphics of the panel it draws on.</param>
-        public Board(Graphics g)
+        /// <param name="difficulty">The Difficulty of the Bot!</param>
+        public Board(Graphics g, BotDifficulty difficulty)
         {
             _graphics = g;
+            _botDifficulty = difficulty;
             ClearField();
             DrawField();
         }
@@ -45,15 +49,253 @@ namespace TicTacToeClient.Game_Components
 
         /// <summary>
         /// Method used to randomly select a unplaced tile for the AI if the checking
-        /// method has no suggestion.
+        /// has no suggestion.
         /// </summary>
         public void AiMove(SpaceTypes aiType)
         {
-            var index = _random.Next(_openFieldPlaces.Count);
-            FieldItem played = _openFieldPlaces[index];
-            PlaySpace(aiType, played);
-            DrawField();
-            //TODO: Add counter moves and AI Logic
+            var playerType = aiType == SpaceTypes.O ? SpaceTypes.X : SpaceTypes.O;
+
+            #region Offensive Check
+
+            if (_botDifficulty >= BotDifficulty.Hard)
+            {
+                #region Horizontal Check
+
+                for (var r = 0; r < 3; r++)
+                {
+                    if (_fieldSpaces[r, 0] == aiType && _fieldSpaces[r, 1] == aiType &&
+                        _fieldSpaces[r, 2] == SpaceTypes.Open)
+                    {
+                        PlaySpace(aiType, new FieldItem(r, 2));
+                        return;
+                    }
+                    if (_fieldSpaces[r, 0] == aiType && _fieldSpaces[r, 1] == SpaceTypes.Open &&
+                        _fieldSpaces[r, 2] == aiType)
+                    {
+                        PlaySpace(aiType, new FieldItem(r, 1));
+                        return;
+                    }
+                    if (_fieldSpaces[r, 0] == SpaceTypes.Open && _fieldSpaces[r, 1] == aiType &&
+                        _fieldSpaces[r, 2] == aiType)
+                    {
+                        PlaySpace(aiType, new FieldItem(r, 0));
+                        return;
+                    }
+                }
+
+                #endregion
+
+                #region Vertical Check
+
+                for (var c = 0; c < 3; c++)
+                {
+                    if (_fieldSpaces[0, c] == aiType && _fieldSpaces[1, c] == aiType &&
+                        _fieldSpaces[2, c] == SpaceTypes.Open)
+                    {
+                        PlaySpace(aiType, new FieldItem(2, c));
+                        return;
+                    }
+                    if (_fieldSpaces[0, c] == aiType && _fieldSpaces[1, c] == SpaceTypes.Open &&
+                        _fieldSpaces[2, c] == aiType)
+                    {
+                        PlaySpace(aiType, new FieldItem(1, c));
+                        return;
+                    }
+                    if (_fieldSpaces[0, c] == SpaceTypes.Open && _fieldSpaces[1, c] == aiType &&
+                        _fieldSpaces[2, c] == aiType)
+                    {
+                        PlaySpace(aiType, new FieldItem(0, c));
+                        return;
+                    }
+                }
+
+                #endregion
+
+                #region Cross Check
+                if (_fieldSpaces[0, 0] == aiType && _fieldSpaces[1, 1] == aiType &&
+                        _fieldSpaces[2, 2] == SpaceTypes.Open)
+                {
+                    PlaySpace(aiType, new FieldItem(2, 2));
+                    return;
+                }
+                if (_fieldSpaces[0, 0] == aiType && _fieldSpaces[1, 1] == SpaceTypes.Open &&
+                    _fieldSpaces[2, 2] == aiType)
+                {
+                    PlaySpace(aiType, new FieldItem(1, 1));
+                    return;
+                }
+                if (_fieldSpaces[0, 0] == SpaceTypes.Open && _fieldSpaces[1, 1] == aiType &&
+                    _fieldSpaces[2, 2] == aiType)
+                {
+                    PlaySpace(aiType, new FieldItem(0, 0));
+                    return;
+                }
+
+                if (_fieldSpaces[0, 2] == aiType && _fieldSpaces[1, 1] == aiType &&
+                        _fieldSpaces[2, 0] == SpaceTypes.Open)
+                {
+                    PlaySpace(aiType, new FieldItem(2, 0));
+                    return;
+                }
+                if (_fieldSpaces[0, 2] == aiType && _fieldSpaces[1, 1] == SpaceTypes.Open &&
+                    _fieldSpaces[2, 0] == aiType)
+                {
+                    PlaySpace(aiType, new FieldItem(1, 1));
+                    return;
+                }
+                if (_fieldSpaces[0, 2] == SpaceTypes.Open && _fieldSpaces[1, 1] == aiType &&
+                    _fieldSpaces[2, 0] == aiType)
+                {
+                    PlaySpace(aiType, new FieldItem(0, 2));
+                    return;
+                }
+                #endregion
+            }
+
+            #endregion
+
+            #region Defensive Check
+
+            if (_botDifficulty >= BotDifficulty.Medium)
+            {
+                #region Horizontal Check
+
+                for (var r = 0; r < 3; r++)
+                {
+                    if (_fieldSpaces[r, 0] == playerType && _fieldSpaces[r, 1] == playerType &&
+                        _fieldSpaces[r, 2] == SpaceTypes.Open)
+                    {
+                        PlaySpace(aiType, new FieldItem(r, 2));
+                        return;
+                    }
+                    if (_fieldSpaces[r, 0] == playerType && _fieldSpaces[r, 1] == SpaceTypes.Open &&
+                        _fieldSpaces[r, 2] == playerType)
+                    {
+                        PlaySpace(aiType, new FieldItem(r, 1));
+                        return;
+                    }
+                    if (_fieldSpaces[r, 0] == SpaceTypes.Open && _fieldSpaces[r, 1] == playerType &&
+                        _fieldSpaces[r, 2] == playerType)
+                    {
+                        PlaySpace(aiType, new FieldItem(r, 0));
+                        return;
+                    }
+                }
+
+                #endregion
+
+                #region Vertical Check
+
+                for (var c = 0; c < 3; c++)
+                {
+                    if (_fieldSpaces[0, c] == playerType && _fieldSpaces[1, c] == playerType &&
+                        _fieldSpaces[2, c] == SpaceTypes.Open)
+                    {
+                        PlaySpace(aiType, new FieldItem(2, c));
+                        return;
+                    }
+                    if (_fieldSpaces[0, c] == playerType && _fieldSpaces[1, c] == SpaceTypes.Open &&
+                        _fieldSpaces[2, c] == playerType)
+                    {
+                        PlaySpace(aiType, new FieldItem(1, c));
+                        return;
+                    }
+                    if (_fieldSpaces[0, c] == SpaceTypes.Open && _fieldSpaces[1, c] == playerType &&
+                        _fieldSpaces[2, c] == playerType)
+                    {
+                        PlaySpace(aiType, new FieldItem(0, c));
+                        return;
+                    }
+                }
+
+                #endregion
+
+                #region Cross Check
+                if (_fieldSpaces[0, 0] == playerType && _fieldSpaces[1, 1] == playerType &&
+                        _fieldSpaces[2, 2] == SpaceTypes.Open)
+                {
+                    PlaySpace(playerType, new FieldItem(2, 2));
+                    return;
+                }
+                if (_fieldSpaces[0, 0] == playerType && _fieldSpaces[1, 1] == SpaceTypes.Open &&
+                    _fieldSpaces[2, 2] == playerType)
+                {
+                    PlaySpace(playerType, new FieldItem(1, 1));
+                    return;
+                }
+                if (_fieldSpaces[0, 0] == SpaceTypes.Open && _fieldSpaces[1, 1] == playerType &&
+                    _fieldSpaces[2, 2] == playerType)
+                {
+                    PlaySpace(playerType, new FieldItem(0, 0));
+                    return;
+                }
+
+                if (_fieldSpaces[0, 2] == playerType && _fieldSpaces[1, 1] == playerType &&
+                        _fieldSpaces[2, 0] == SpaceTypes.Open)
+                {
+                    PlaySpace(playerType, new FieldItem(2, 0));
+                    return;
+                }
+                if (_fieldSpaces[0, 2] == playerType && _fieldSpaces[1, 1] == SpaceTypes.Open &&
+                    _fieldSpaces[2, 0] == playerType)
+                {
+                    PlaySpace(playerType, new FieldItem(1, 1));
+                    return;
+                }
+                if (_fieldSpaces[0, 2] == SpaceTypes.Open && _fieldSpaces[1, 1] == playerType &&
+                    _fieldSpaces[2, 0] == playerType)
+                {
+                    PlaySpace(playerType, new FieldItem(0, 2));
+                    return;
+                }
+                #endregion
+            }
+
+            #endregion
+
+            #region Easy Mode Check
+
+            if (_botDifficulty >= BotDifficulty.Easy)
+            {
+                if (_fieldSpaces[1, 1] == SpaceTypes.Open)
+                {
+                    PlaySpace(aiType, new FieldItem(1, 1));
+                    return;
+                }
+                if (_fieldSpaces[0, 0] == SpaceTypes.Open)
+                {
+                    PlaySpace(aiType, new FieldItem(0, 0));
+                    return;
+                }
+                if (_fieldSpaces[0, 2] == SpaceTypes.Open)
+                {
+                    PlaySpace(aiType, new FieldItem(0, 2));
+                    return;
+                }
+                if (_fieldSpaces[2, 0] == SpaceTypes.Open)
+                {
+                    PlaySpace(aiType, new FieldItem(2, 0));
+                    return;
+                }
+                if (_fieldSpaces[2, 2] == SpaceTypes.Open)
+                {
+                    PlaySpace(aiType, new FieldItem(2, 2));
+                    return;
+                }
+            }
+
+            #endregion
+
+            #region Random
+
+            if (_botDifficulty >= BotDifficulty.Random)
+            {
+                var index = _random.Next(_openFieldPlaces.Count);
+                var played = _openFieldPlaces[index];
+                PlaySpace(aiType, played);
+            }
+
+            #endregion
         }
 
         /// <summary>

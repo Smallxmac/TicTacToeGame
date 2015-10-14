@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\BotDifficulty.cs" />
     <Compile Include="Game Components\Board.cs" />
     <Compile Include="Game Components\FieldItem.cs" />
     <Compile Include="Gui\Menu.cs">

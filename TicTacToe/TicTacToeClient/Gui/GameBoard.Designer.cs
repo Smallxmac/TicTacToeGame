@@ -109,10 +109,12 @@
             // botDifficulty
             // 
             this.botDifficulty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.botDifficulty.Enabled = false;
             this.botDifficulty.FormattingEnabled = true;
             this.botDifficulty.Items.AddRange(new object[] {
+            "Random",
             "Easy",
-            "Normal",
+            "Medium",
             "Hard"});
             this.botDifficulty.Location = new System.Drawing.Point(339, 17);
             this.botDifficulty.Name = "botDifficulty";
@@ -185,6 +187,7 @@
             this.typeBox.Name = "typeBox";
             this.typeBox.Size = new System.Drawing.Size(121, 21);
             this.typeBox.TabIndex = 1;
+            this.typeBox.SelectedIndexChanged += new System.EventHandler(this.typeBox_SelectedIndexChanged);
             // 
             // label1
             // 
