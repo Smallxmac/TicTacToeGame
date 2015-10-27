@@ -1,4 +1,4 @@
-﻿namespace TicTacToeClient
+﻿namespace TicTacToeClient.Gui
 {
     partial class Menu
     {

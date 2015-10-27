@@ -34,6 +34,7 @@ namespace TicTacToeClient.Gui
         {
             InitializeComponent();
             Size = new Size(528, 217);
+            botDifficulty.Text = BotDifficulty.Random.ToString();
         }
 
         /// <summary>
@@ -42,9 +43,7 @@ namespace TicTacToeClient.Gui
         /// </summary>
         private void StartGame()
         {
-            _playingBoard = botDifficulty.Text == ""
-                ? new Board(_graphics, BotDifficulty.Random)
-                : new Board(_graphics, (BotDifficulty) Enum.Parse(typeof (BotDifficulty), botDifficulty.Text));
+            _playingBoard = new Board(_graphics, (BotDifficulty) Enum.Parse(typeof (BotDifficulty), botDifficulty.Text));
             _playingBoard.GameOver += GameOver;
             _playerType = (SpaceTypes)Enum.Parse(typeof(SpaceTypes), playerSpaceType.Text);
             _aiType = playerSpaceType.Text == @"X" ? SpaceTypes.O : SpaceTypes.X;
@@ -55,7 +54,6 @@ namespace TicTacToeClient.Gui
             _roundsPlayed = 1;
             roundLable.Text = $"Round {_roundsPlayed} out of {_rounds}";
             if (firstTurn.Checked) return;
-            _aiTurn = true;
             turnLable.Text = @"Current Turn: Player 2";
             if (!_twoPlayers)
                 _playingBoard.AiMove(_aiType);
@@ -81,34 +79,43 @@ namespace TicTacToeClient.Gui
         /// <param name="eventArgs">Not used.</param>
         private void GameOver(object sender, EventArgs eventArgs)
         {
-            SpaceTypes winner = (SpaceTypes)sender;
-
+            var winner = (SpaceTypes)sender;
             if (_aiType == winner)
+            {
                 _aiWins++;
+                MessageBox.Show(this, Properties.Resources.RoundOverLose, Properties.Resources.RoundOverTitle,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             else if (winner == SpaceTypes.Open)
             {
                 _aiWins++;
                 _playerWins++;
+                MessageBox.Show(this, Properties.Resources.RoundOverDraw, Properties.Resources.RoundOverTitle,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
+            {
                 _playerWins++;
+                MessageBox.Show(this, Properties.Resources.RoundOverWin, Properties.Resources.RoundOverTitle,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
             if (_rounds == _roundsPlayed)
             {
                 DialogResult reply;
                 //Player Win
                 if (_playerWins > _aiWins)
-                    reply = MessageBox.Show(this, Properties.Resources.GameOver_Win,
+                    reply = MessageBox.Show(this, Properties.Resources.GameOverWin,
                         Properties.Resources.GameOverMessageTitle,
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 //Draw
                 else if (_playerWins == _aiWins)
-                    reply = MessageBox.Show(this, Properties.Resources.GameOver_Draw,
+                    reply = MessageBox.Show(this, Properties.Resources.GameOverDraw,
                         Properties.Resources.GameOverMessageTitle,
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 //Player Lose
                 else
-                    reply = MessageBox.Show(this, Properties.Resources.Gameover_Lost,
+                    reply = MessageBox.Show(this, Properties.Resources.GameoverLost,
                         Properties.Resources.GameOverMessageTitle,
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -169,7 +176,6 @@ namespace TicTacToeClient.Gui
                 var playedSpace = new FieldItem(row, column);
                 var playedType = _playerType;
                 if (!_playingBoard.PlaySpace(playedType, playedSpace)) return;
-                _aiTurn = true;
                 _playingBoard.AiMove(_aiType);
                 _aiTurn = false;
             }
@@ -186,10 +192,17 @@ namespace TicTacToeClient.Gui
         /// <param name="e"></param>
         private void BeginButtonClick(object sender, EventArgs e)
         {
-            menuPanel.Visible = false;
-            gamePanel.Visible = true;
-            Size = new Size(640,680);
-            StartGame();
+            if (playerSpaceType.Text != "" && botDifficulty.Text != "" && typeBox.Text != "")
+            {
+                menuPanel.Visible = false;
+                gamePanel.Visible = true;
+                Size = new Size(640, 680);
+                StartGame();
+            }
+            else
+                MessageBox.Show(this, Properties.Resources.MissingInfo, Properties.Resources.MissingInfoTitle,
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            
         }
 
         /// <summary>
@@ -203,8 +216,6 @@ namespace TicTacToeClient.Gui
             botDifficulty.Enabled = typeBox.Text != @"Player Vs Player";
         }
 
-        #endregion
-
-        
+        #endregion 
     }
 }

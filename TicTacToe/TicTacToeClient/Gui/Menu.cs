@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using TicTacToeClient.Gui;
 
-namespace TicTacToeClient
+namespace TicTacToeClient.Gui
 {
     public partial class Menu : Form
     {
@@ -22,9 +12,10 @@ namespace TicTacToeClient
 
         private void onlineButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, @"Thank you for taking interests in this feature however it is still in development :(",
-                @"Coming Soon", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //TODO: Open Login Form
+            Visible = false;
+            var online = new Login();
+            online.Show(this);
+            online.FormClosing += ChildClosing;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -44,11 +35,11 @@ namespace TicTacToeClient
             Visible = false;
             var gameMenu = new GameBoard();
             gameMenu.Show(this);
-            gameMenu.FormClosing += gameClosing;
+            gameMenu.FormClosing += ChildClosing;
 
         }
 
-        private void gameClosing(object sender, EventArgs e)
+        private void ChildClosing(object sender, EventArgs e)
         {
             Visible = true;
         }

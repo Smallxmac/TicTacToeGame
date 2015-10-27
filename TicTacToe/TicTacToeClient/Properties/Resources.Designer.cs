@@ -61,29 +61,40 @@ namespace TicTacToeClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon checkIcon {
+            get {
+                object obj = ResourceManager.GetObject("checkIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon errorIcon {
+            get {
+                object obj = ResourceManager.GetObject("errorIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Whoa it was a draw. Would you like to play again?.
         /// </summary>
-        internal static string GameOver_Draw {
+        internal static string GameOverDraw {
             get {
-                return ResourceManager.GetString("GameOver.Draw", resourceCulture);
+                return ResourceManager.GetString("GameOverDraw", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to It seems as though Player One has lost. Would you like to play again?.
         /// </summary>
-        internal static string Gameover_Lost {
+        internal static string GameoverLost {
             get {
-                return ResourceManager.GetString("Gameover.Lost", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Player One has won! Would you like to play again?.
-        /// </summary>
-        internal static string GameOver_Win {
-            get {
-                return ResourceManager.GetString("GameOver.Win", resourceCulture);
+                return ResourceManager.GetString("GameoverLost", resourceCulture);
             }
         }
         
@@ -93,6 +104,168 @@ namespace TicTacToeClient.Properties {
         internal static string GameOverMessageTitle {
             get {
                 return ResourceManager.GetString("GameOverMessageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player One has won! Would you like to play again?.
+        /// </summary>
+        internal static string GameOverWin {
+            get {
+                return ResourceManager.GetString("GameOverWin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please make sure your username or password are longer than three characters..
+        /// </summary>
+        internal static string LoginCharacterTooFew {
+            get {
+                return ResourceManager.GetString("LoginCharacterTooFew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too Few Characters.
+        /// </summary>
+        internal static string LoginCharacterTooFewTitle {
+            get {
+                return ResourceManager.GetString("LoginCharacterTooFewTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login to An Existing Account.
+        /// </summary>
+        internal static string LoginTitle {
+            get {
+                return ResourceManager.GetString("LoginTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please fill out all needed information!.
+        /// </summary>
+        internal static string MissingInfo {
+            get {
+                return ResourceManager.GetString("MissingInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing Information!.
+        /// </summary>
+        internal static string MissingInfoTitle {
+            get {
+                return ResourceManager.GetString("MissingInfoTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password Recovery.
+        /// </summary>
+        internal static string PasswordRecoveryTitle {
+            get {
+                return ResourceManager.GetString("PasswordRecoveryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Email..
+        /// </summary>
+        internal static string RegisterInvalidEmail {
+            get {
+                return ResourceManager.GetString("RegisterInvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please use a valid E-Mail address!.
+        /// </summary>
+        internal static string RegisterInvalidEmailTitle {
+            get {
+                return ResourceManager.GetString("RegisterInvalidEmailTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The passwords you have entered do not seem to match one another..
+        /// </summary>
+        internal static string RegisterPasswordMismatch {
+            get {
+                return ResourceManager.GetString("RegisterPasswordMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password mismatch..
+        /// </summary>
+        internal static string RegisterPasswordMismatchTitle {
+            get {
+                return ResourceManager.GetString("RegisterPasswordMismatchTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a New Account.
+        /// </summary>
+        internal static string RegisterTitle {
+            get {
+                return ResourceManager.GetString("RegisterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After waiting for the server to respond I have grown long and restless, I have given up on your connection attempt :(.
+        /// </summary>
+        internal static string RequestTimeOut {
+            get {
+                return ResourceManager.GetString("RequestTimeOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection Timed Out.
+        /// </summary>
+        internal static string RequestTimeOutTitle {
+            get {
+                return ResourceManager.GetString("RequestTimeOutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This round was a draw. Onto the next.
+        /// </summary>
+        internal static string RoundOverDraw {
+            get {
+                return ResourceManager.GetString("RoundOverDraw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player two/ai has won this round. Onto the next.
+        /// </summary>
+        internal static string RoundOverLose {
+            get {
+                return ResourceManager.GetString("RoundOverLose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Round Over.
+        /// </summary>
+        internal static string RoundOverTitle {
+            get {
+                return ResourceManager.GetString("RoundOverTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player one has won this round. Onto the next.
+        /// </summary>
+        internal static string RoundOverWin {
+            get {
+                return ResourceManager.GetString("RoundOverWin", resourceCulture);
             }
         }
     }

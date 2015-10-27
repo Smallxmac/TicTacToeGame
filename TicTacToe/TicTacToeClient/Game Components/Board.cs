@@ -15,7 +15,7 @@ namespace TicTacToeClient.Game_Components
         public delegate void GameOverHandler(SpaceTypes winner, EventArgs e);
         public event EventHandler GameOver;
         private readonly Random _random = new Random();
-        private BotDifficulty _botDifficulty;
+        private readonly BotDifficulty _botDifficulty;
 
         /// <summary>
         /// Constructor called that clears the field and also draws the board. 
