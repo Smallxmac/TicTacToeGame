@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TicTacToeServer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Port" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5689</Value>
+    </Setting>
+    <Setting Name="MysqlConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">server=localhost;userid=root;password=root;database=tictactoe</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

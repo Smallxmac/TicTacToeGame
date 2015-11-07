@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TicTacToeClient.Properties {
+namespace TicTacToeServer.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,19 +25,19 @@ namespace TicTacToeClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
-        public string IP {
+        [global::System.Configuration.DefaultSettingValueAttribute("5689")]
+        public int Port {
             get {
-                return ((string)(this["IP"]));
+                return ((int)(this["Port"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5689")]
-        public int Port {
+        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;userid=root;password=root;database=tictactoe")]
+        public string MysqlConnectionString {
             get {
-                return ((int)(this["Port"]));
+                return ((string)(this["MysqlConnectionString"]));
             }
         }
     }

@@ -171,6 +171,16 @@ namespace TicTacToeClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Preloader_2 {
+            get {
+                object obj = ResourceManager.GetObject("Preloader_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid Email..
         /// </summary>
         internal static string RegisterInvalidEmail {

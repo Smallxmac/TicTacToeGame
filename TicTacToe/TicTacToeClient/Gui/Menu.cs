@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using TicTacToeClient.Networking;
 
 namespace TicTacToeClient.Gui
 {
@@ -13,13 +14,15 @@ namespace TicTacToeClient.Gui
         private void onlineButton_Click(object sender, EventArgs e)
         {
             Visible = false;
-            var online = new Login();
+            var online = new Login(new ClientHandler());
             online.Show(this);
             online.FormClosing += ChildClosing;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            var loding = new LoadingUI();
+            loding.ShowDialog(this);
             MessageBox.Show(this, @"Thank you for taking interests in this feature however it is still in development :(",
                 @"Coming Soon", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

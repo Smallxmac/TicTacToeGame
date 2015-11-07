@@ -12,7 +12,6 @@ namespace TicTacToeClient.Game_Components
         private readonly SpaceTypes[,] _fieldSpaces = new SpaceTypes[3, 3];
         private readonly List<FieldItem> _openFieldPlaces = new List<FieldItem>();
         private readonly Graphics _graphics;
-        public delegate void GameOverHandler(SpaceTypes winner, EventArgs e);
         public event EventHandler GameOver;
         private readonly Random _random = new Random();
         private readonly BotDifficulty _botDifficulty;

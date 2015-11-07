@@ -71,7 +71,7 @@
             this.loginPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.loginPanel.Location = new System.Drawing.Point(0, 0);
             this.loginPanel.Name = "loginPanel";
-            this.loginPanel.Size = new System.Drawing.Size(232, 150);
+            this.loginPanel.Size = new System.Drawing.Size(274, 184);
             this.loginPanel.TabIndex = 0;
             // 
             // passwordBox
@@ -79,7 +79,7 @@
             this.passwordBox.Location = new System.Drawing.Point(76, 49);
             this.passwordBox.Name = "passwordBox";
             this.passwordBox.Size = new System.Drawing.Size(141, 20);
-            this.passwordBox.TabIndex = 8;
+            this.passwordBox.TabIndex = 2;
             this.passwordBox.UseSystemPasswordChar = true;
             // 
             // usernameBox
@@ -87,7 +87,7 @@
             this.usernameBox.Location = new System.Drawing.Point(76, 16);
             this.usernameBox.Name = "usernameBox";
             this.usernameBox.Size = new System.Drawing.Size(141, 20);
-            this.usernameBox.TabIndex = 7;
+            this.usernameBox.TabIndex = 1;
             // 
             // cancelButton
             // 
@@ -104,7 +104,7 @@
             this.loginButton.Location = new System.Drawing.Point(12, 116);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(75, 23);
-            this.loginButton.TabIndex = 5;
+            this.loginButton.TabIndex = 3;
             this.loginButton.Text = "Login";
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
@@ -115,7 +115,7 @@
             this.registerLink.Location = new System.Drawing.Point(171, 89);
             this.registerLink.Name = "registerLink";
             this.registerLink.Size = new System.Drawing.Size(46, 13);
-            this.registerLink.TabIndex = 3;
+            this.registerLink.TabIndex = 5;
             this.registerLink.TabStop = true;
             this.registerLink.Text = "Register";
             this.registerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.registerLink_LinkClicked);
@@ -126,7 +126,7 @@
             this.forgotLink.Location = new System.Drawing.Point(12, 89);
             this.forgotLink.Name = "forgotLink";
             this.forgotLink.Size = new System.Drawing.Size(86, 13);
-            this.forgotLink.TabIndex = 2;
+            this.forgotLink.TabIndex = 4;
             this.forgotLink.TabStop = true;
             this.forgotLink.Text = "Forgot Password";
             this.forgotLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.forgotLink_LinkClicked);
@@ -164,7 +164,7 @@
             this.registerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.registerPanel.Location = new System.Drawing.Point(0, 0);
             this.registerPanel.Name = "registerPanel";
-            this.registerPanel.Size = new System.Drawing.Size(232, 150);
+            this.registerPanel.Size = new System.Drawing.Size(274, 184);
             this.registerPanel.TabIndex = 1;
             // 
             // regBackButton
@@ -172,7 +172,7 @@
             this.regBackButton.Location = new System.Drawing.Point(175, 145);
             this.regBackButton.Name = "regBackButton";
             this.regBackButton.Size = new System.Drawing.Size(75, 23);
-            this.regBackButton.TabIndex = 9;
+            this.regBackButton.TabIndex = 6;
             this.regBackButton.Text = "Back";
             this.regBackButton.UseVisualStyleBackColor = true;
             this.regBackButton.Click += new System.EventHandler(this.regBackButton_Click);
@@ -182,7 +182,7 @@
             this.RegSubmitButton.Location = new System.Drawing.Point(15, 145);
             this.RegSubmitButton.Name = "RegSubmitButton";
             this.RegSubmitButton.Size = new System.Drawing.Size(75, 23);
-            this.RegSubmitButton.TabIndex = 8;
+            this.RegSubmitButton.TabIndex = 5;
             this.RegSubmitButton.Text = "Submit";
             this.RegSubmitButton.UseVisualStyleBackColor = true;
             this.RegSubmitButton.Click += new System.EventHandler(this.RegSubmitButton_Click);
@@ -192,7 +192,7 @@
             this.regEmailBox.Location = new System.Drawing.Point(76, 105);
             this.regEmailBox.Name = "regEmailBox";
             this.regEmailBox.Size = new System.Drawing.Size(174, 20);
-            this.regEmailBox.TabIndex = 7;
+            this.regEmailBox.TabIndex = 4;
             // 
             // label6
             // 
@@ -208,7 +208,8 @@
             this.regPasswordBox2.Location = new System.Drawing.Point(76, 75);
             this.regPasswordBox2.Name = "regPasswordBox2";
             this.regPasswordBox2.Size = new System.Drawing.Size(174, 20);
-            this.regPasswordBox2.TabIndex = 5;
+            this.regPasswordBox2.TabIndex = 3;
+            this.regPasswordBox2.UseSystemPasswordChar = true;
             // 
             // label5
             // 
@@ -224,7 +225,8 @@
             this.regPasswordBox.Location = new System.Drawing.Point(76, 45);
             this.regPasswordBox.Name = "regPasswordBox";
             this.regPasswordBox.Size = new System.Drawing.Size(174, 20);
-            this.regPasswordBox.TabIndex = 3;
+            this.regPasswordBox.TabIndex = 2;
+            this.regPasswordBox.UseSystemPasswordChar = true;
             // 
             // label4
             // 
@@ -260,7 +262,7 @@
             this.forgotPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.forgotPanel.Location = new System.Drawing.Point(0, 0);
             this.forgotPanel.Name = "forgotPanel";
-            this.forgotPanel.Size = new System.Drawing.Size(232, 150);
+            this.forgotPanel.Size = new System.Drawing.Size(274, 184);
             this.forgotPanel.TabIndex = 2;
             // 
             // forgotBackButton
@@ -303,7 +305,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(232, 150);
+            this.ClientSize = new System.Drawing.Size(274, 184);
             this.Controls.Add(this.loginPanel);
             this.Controls.Add(this.registerPanel);
             this.Controls.Add(this.forgotPanel);
