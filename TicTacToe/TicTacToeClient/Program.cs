@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using TicTacToeClient.Gui;
 using Menu = TicTacToeClient.Gui.Menu;
 
 namespace TicTacToeClient

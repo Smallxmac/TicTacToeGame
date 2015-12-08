@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using TicTacToeServer.Database.Task_Managers;
+using TicTacToeServer.Database;
+using TicTacToeServer.Database.Domains;
+using TicTacToeServer.Database.Respositorys;
 using TicTacToeServer.Enums;
 using TicTacToeServer.Objects;
+using TicTacToeServer.Other;
 
 namespace TicTacToeServer.Networking.Packets
 {
@@ -33,38 +37,43 @@ namespace TicTacToeServer.Networking.Packets
         public static void Handle( SocketClient client,RegisterRequest request)
         {
             var registerInfo = request.RegisterInformation;
-            var account = new Account
+            var user = new Accounts
             {
                 Username = registerInfo[0],
                 Password = GetStringSha1Hash(registerInfo[1]),
                 Email = registerInfo[2],
-                RegisterIp = client.handler.RemoteEndPoint.ToString(),
-                LastLoginIp = client.handler.RemoteEndPoint.ToString(),
-                RegisterTime = DateTime.Now,
-                LastLoginTime = DateTime.Now,
+                Registerip = client.handler.RemoteEndPoint.ToString(),
+                Lastloginip = client.handler.RemoteEndPoint.ToString(),
+                Registertime = DateTime.Now,
+                Lastlogintime = DateTime.Now,
                 Locked = false,
                 Verified = false,
-                VerificationCode = Guid.NewGuid().ToString()
+                Verificationcode = Guid.NewGuid().ToString()
         };
 
             var reply = new LoginResponse();
-            if (!AccountManager.AccountExist(account.Username))
+            try
             {
-                if (!AccountManager.EmailExist(account.Email))
+                if (AccountRepository.GetAccount(user.Username, null) == null)
                 {
-                    if (AccountManager.SaveAccount(account))
+                    if (AccountRepository.GetAccount(null, user.Email) == null)
                     {
+                        BaseRepository.Add(user);
                         reply.ResponseType = LoginResponseType.AccountCreated;
-                        EmailSender.SendWelcomeEmail(account);
+                        reply.AccountId = user.Accountid;
+                        EmailSender.SendWelcomeEmail(user);
                     }
                     else
-                        reply.ResponseType = LoginResponseType.DatabaseError;
+                        reply.ResponseType = LoginResponseType.EmailInUse;
                 }
                 else
-                    reply.ResponseType = LoginResponseType.EmailInUse;
+                    reply.ResponseType = LoginResponseType.UsernameInUse;
             }
-            else
-                reply.ResponseType = LoginResponseType.UsernameInUse;
+            catch (Exception e)
+            {
+                reply.ResponseType = LoginResponseType.DatabaseError;
+                Logger.Error(e.Message);
+            }
             client.Send(reply);
         }
 

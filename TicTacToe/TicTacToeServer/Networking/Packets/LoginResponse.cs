@@ -1,4 +1,6 @@
-﻿using TicTacToeServer.Database.Task_Managers;
+﻿using System.Linq;
+using TicTacToeServer.Database;
+using TicTacToeServer.Database.Respositorys;
 using TicTacToeServer.Enums;
 
 namespace TicTacToeServer.Networking.Packets
@@ -32,8 +34,8 @@ namespace TicTacToeServer.Networking.Packets
 
         public static void Handle(SocketClient client, LoginResponse response)
         {
-            if(response.ResponseType == LoginResponseType.AccountNotVerified)
-                EmailSender.SendWelcomeEmail(AccountManager.GetAccount(response.AccountId));
+            if (response.ResponseType != LoginResponseType.AccountNotVerified) return;
+            EmailSender.SendWelcomeEmail(AccountRepository.GetAccount(response.AccountId));
         }
     }
 }

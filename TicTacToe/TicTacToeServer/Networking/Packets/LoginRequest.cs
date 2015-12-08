@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using TicTacToeServer.Database.Task_Managers;
+using NHibernate.Hql.Ast.ANTLR.Tree;
+using TicTacToeServer.Database;
+using TicTacToeServer.Database.Respositorys;
 using TicTacToeServer.Enums;
+using TicTacToeServer.Other;
 
 namespace TicTacToeServer.Networking.Packets
 {
@@ -40,63 +44,67 @@ namespace TicTacToeServer.Networking.Packets
         {
             var info = request.AccountInformation;
             var reply = new LoginResponse();
-            if (AccountManager.AccountExist(info[0]))
+            try
             {
-                var account = AccountManager.GetAccount(info[0]);
-                if (account.Locked && !account.Verified)
+                var account = AccountRepository.GetAccount(info[0],null);
+                if (account != null)
                 {
-                    var resetinfo = info[1].Split(':');
-                    if (account.VerificationCode.Equals(resetinfo[0]))
+                    if (account.Locked && !account.Verified)
                     {
-                        account.Locked = false;
-                        account.Verified = true;
-                        account.Password = GetStringSha1Hash(resetinfo[1]);
-                        reply.ResponseType = LoginResponseType.ResetVerified;
-                        if (!AccountManager.SaveAccount(account))
-                            reply.ResponseType = LoginResponseType.DatabaseError;
-                    }
-                    else
-                        reply.ResponseType = LoginResponseType.ResetLocked;
-                }
-                else if (!account.Locked)
-                {
-                    if (account.Verified)
-                    {
-                        if (account.Password.Equals(GetStringSha1Hash(info[1])))
+                        var resetinfo = info[1].Split(':');
+                        if (account.Verificationcode.Equals(resetinfo[0]))
                         {
-                            reply.AccountId = account.AccountId;
-                            reply.ResponseType = LoginResponseType.Correct;
-                            account.LastLoginIp = client.handler.RemoteEndPoint.ToString();
-                            account.LastLoginTime = DateTime.Today;
-                            if(!AccountManager.SaveAccount(account))
-                                reply.ResponseType = LoginResponseType.DatabaseError;
-                            
-                            client.Account = account;
-                        }
-                        else
-                            reply.ResponseType = LoginResponseType.InvalidPassword;
-                    }
-                    else
-                    {
-                        if (account.VerificationCode.Equals(info[1]))
-                        {
+                            account.Locked = false;
                             account.Verified = true;
-                            reply.ResponseType = LoginResponseType.AccountVerified;
-                            if (!AccountManager.SaveAccount(account))
-                                reply.ResponseType = LoginResponseType.DatabaseError;
+                            account.Password = GetStringSha1Hash(resetinfo[1]);
+                            reply.ResponseType = LoginResponseType.ResetVerified;
+                            BaseRepository.Update(account);
+                        }
+                        else
+                            reply.ResponseType = LoginResponseType.ResetLocked;
+                    }
+                    else if (!account.Locked)
+                    {
+                        if (account.Verified)
+                        {
+                            if (account.Password.Equals(GetStringSha1Hash(info[1])))
+                            {
+                                reply.AccountId = account.Accountid;
+                                reply.ResponseType = LoginResponseType.Correct;
+                                account.Lastloginip = client.handler.RemoteEndPoint.ToString();
+                                account.Lastlogintime = DateTime.Today;
+                                BaseRepository.Update(account);
+                                client.Account = account;
+                            }
+                            else
+                                reply.ResponseType = LoginResponseType.InvalidPassword;
                         }
                         else
                         {
-                            reply.AccountId = account.AccountId;
-                            reply.ResponseType = LoginResponseType.AccountNotVerified;
+                            if (account.Verificationcode.Equals(info[1]))
+                            {
+                                account.Verified = true;
+                                reply.ResponseType = LoginResponseType.AccountVerified;
+                                BaseRepository.Update(account);
+                            }
+                            else
+                            {
+                                reply.AccountId = account.Accountid;
+                                reply.ResponseType = LoginResponseType.AccountNotVerified;
+                            }
                         }
                     }
+                    else
+                        reply.ResponseType = LoginResponseType.AccountLocked;
                 }
                 else
-                    reply.ResponseType = LoginResponseType.AccountLocked;
+                    reply.ResponseType = LoginResponseType.InvalidPassword;
             }
-            else
-                reply.ResponseType = LoginResponseType.InvalidPassword;
+            catch (Exception e)
+            {
+                reply.ResponseType = LoginResponseType.DatabaseError;
+                Logger.Error(e.Message);
+            }
             client.Send(reply);
         }
 

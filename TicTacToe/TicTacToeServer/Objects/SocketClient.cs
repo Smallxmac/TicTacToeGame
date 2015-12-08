@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using TicTacToeServer.Database;
+using TicTacToeServer.Database.Domains;
 using TicTacToeServer.Objects;
 
 namespace TicTacToeServer.Networking
@@ -17,7 +19,7 @@ namespace TicTacToeServer.Networking
         public byte[] PacketBuffer;
         
         public Socket handler;
-        public Account Account;
+        public Accounts Account;
 
         public SocketClient(Socket clientSocket)
         {

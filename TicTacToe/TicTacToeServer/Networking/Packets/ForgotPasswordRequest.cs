@@ -1,6 +1,9 @@
 ﻿using System;
-using TicTacToeServer.Database.Task_Managers;
+using System.Linq;
+using TicTacToeServer.Database;
+using TicTacToeServer.Database.Respositorys;
 using TicTacToeServer.Enums;
+using TicTacToeServer.Other;
 
 namespace TicTacToeServer.Networking.Packets
 {
@@ -26,33 +29,36 @@ namespace TicTacToeServer.Networking.Packets
         public static void Handel(SocketClient client, ForgotPasswordRequest request)
         {
             var reply = new LoginResponse();
-            if (AccountManager.EmailExist(request.Email))
+            try
             {
-                var account = AccountManager.GetAccountByEmail(request.Email);
-                if(account.Locked)
-                    reply.ResponseType = LoginResponseType.AccountLocked;
-                else if (account.Verified)
+                var user = AccountRepository.GetAccount(null, request.Email);
+                if (user != null)
                 {
-                    account.Locked = true;
-                    account.Verified = false;
-                    account.VerificationCode = Guid.NewGuid().ToString();
-                    if (AccountManager.SaveAccount(account))
+                    if (user.Locked)
+                        reply.ResponseType = LoginResponseType.AccountLocked;
+
+                    else if (user.Verified)
                     {
-                        EmailSender.SendRestEmail(account);
-                        reply.AccountId = account.AccountId;
+                        user.Locked = true;
+                        user.Verified = false;
+                        user.Verificationcode = Guid.NewGuid().ToString();
+                        reply.AccountId = user.Accountid;
                         reply.ResponseType = LoginResponseType.ResetSent;
+                        EmailSender.SendRestEmail(user);
+                        BaseRepository.Update(user);
                     }
                     else
-                        reply.ResponseType = LoginResponseType.DatabaseError;
-                    
+                        reply.ResponseType = LoginResponseType.AccountNotVerified;
                 }
                 else
-                    reply.ResponseType = LoginResponseType.AccountNotVerified;
-                
-            }
-            else
-                reply.ResponseType = LoginResponseType.ResetInvalid;
+                    reply.ResponseType = LoginResponseType.ResetInvalid;
 
+            }
+            catch (Exception e)
+            {
+                reply.ResponseType = LoginResponseType.DatabaseError;
+                Logger.Error(e.Message);
+            }
             client.Send(reply);
         }
     }

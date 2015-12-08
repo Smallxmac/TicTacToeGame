@@ -34,7 +34,7 @@ namespace TicTacToeServer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;userid=root;password=root;database=tictactoe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=localhost;Database=tictactoedb;Uid=root;Pwd=root;")]
         public string MysqlConnectionString {
             get {
                 return ((string)(this["MysqlConnectionString"]));
