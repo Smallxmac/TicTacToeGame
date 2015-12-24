@@ -8,6 +8,8 @@
         AccountLocked,
         AccountNotVerified,
         AccountVerified,
+        TooManyTries,
+        InvalidMac,
 
         AccountCreated,
         UsernameInUse,

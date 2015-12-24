@@ -20,7 +20,7 @@ namespace TicTacToeServer.Networking
             switch (type)
             {
                 case PacketType.LoginRequest:
-                    LoginRequest.Handel(client, new LoginRequest(client.PacketBuffer));
+                    LoginRequest.Handel(client, new LoginRequest(client.PacketBuffer), false);
                     break;
                 case PacketType.RegisterRequest:
                     RegisterRequest.Handle(client, new RegisterRequest(client.buffer));
@@ -31,8 +31,11 @@ namespace TicTacToeServer.Networking
                 case PacketType.ForgotPasswordRequest:
                     ForgotPasswordRequest.Handel(client, new ForgotPasswordRequest(client.PacketBuffer));
                     break;
+                case PacketType.MaccAddress:
+                        MacAddress.Handle(client, new MacAddress(client.PacketBuffer));
+                    break;
                 default:
-                    Logger.Warning($"Unknown packet type {type} from {client.handler.RemoteEndPoint} with the length of {BitConverter.ToInt16(client.PacketBuffer, 2)}");
+                    Logger.Warning($"Unknown packet type {type} from {client.Handler.RemoteEndPoint} with the length of {BitConverter.ToInt16(client.PacketBuffer, 2)}");
                     break;
             }
         }

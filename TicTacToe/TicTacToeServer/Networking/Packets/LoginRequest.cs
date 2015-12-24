@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using NHibernate.Hql.Ast.ANTLR.Tree;
 using TicTacToeServer.Database;
+using TicTacToeServer.Database.Domains;
 using TicTacToeServer.Database.Respositorys;
 using TicTacToeServer.Enums;
 using TicTacToeServer.Other;
@@ -40,65 +42,94 @@ namespace TicTacToeServer.Networking.Packets
             }
         }
 
-        public static void Handel(SocketClient client, LoginRequest request)
+        public static void Handel(SocketClient client, LoginRequest request, bool bypass)
         {
             var info = request.AccountInformation;
             var reply = new LoginResponse();
+            var record = BlacklistIpsRepository.GetRecordByMac(client.MAddress) ??
+                         new BlackListedIps {Attempts = 0, MacAddress = client.MAddress};
+            var address = (IPEndPoint)client.Handler.RemoteEndPoint;
+            record.Ip = address.Address.ToString();
+            record.Attempts++;
             try
             {
-                var account = AccountRepository.GetAccount(info[0],null);
-                if (account != null)
+                if (record.Attempts > 3 && !bypass)
                 {
-                    if (account.Locked && !account.Verified)
-                    {
-                        var resetinfo = info[1].Split(':');
-                        if (account.Verificationcode.Equals(resetinfo[0]))
-                        {
-                            account.Locked = false;
-                            account.Verified = true;
-                            account.Password = GetStringSha1Hash(resetinfo[1]);
-                            reply.ResponseType = LoginResponseType.ResetVerified;
-                            BaseRepository.Update(account);
-                        }
-                        else
-                            reply.ResponseType = LoginResponseType.ResetLocked;
-                    }
-                    else if (!account.Locked)
-                    {
-                        if (account.Verified)
-                        {
-                            if (account.Password.Equals(GetStringSha1Hash(info[1])))
-                            {
-                                reply.AccountId = account.Accountid;
-                                reply.ResponseType = LoginResponseType.Correct;
-                                account.Lastloginip = client.handler.RemoteEndPoint.ToString();
-                                account.Lastlogintime = DateTime.Today;
-                                BaseRepository.Update(account);
-                                client.Account = account;
-                            }
-                            else
-                                reply.ResponseType = LoginResponseType.InvalidPassword;
-                        }
-                        else
-                        {
-                            if (account.Verificationcode.Equals(info[1]))
-                            {
-                                account.Verified = true;
-                                reply.ResponseType = LoginResponseType.AccountVerified;
-                                BaseRepository.Update(account);
-                            }
-                            else
-                            {
-                                reply.AccountId = account.Accountid;
-                                reply.ResponseType = LoginResponseType.AccountNotVerified;
-                            }
-                        }
-                    }
+                    if (record.Attempts == 5)
+                        record.BlacklistLiftTime = DateTime.Now.AddMinutes(15);
+                    else if (record.Attempts == 8)
+                        record.BlacklistLiftTime = DateTime.Now.AddMinutes(30);
+                    else if (record.Attempts >= 11)
+                        record.BlacklistLiftTime = DateTime.Now.AddMinutes(record.Attempts*10);
                     else
-                        reply.ResponseType = LoginResponseType.AccountLocked;
+                    {
+                        Handel(client, request, true);
+                        return;
+                    }
+                    BaseRepository.Update(record);
+                    reply.ResponseType = LoginResponseType.TooManyTries;
+                    reply.AccountId = (int) record.BlacklistLiftTime.Subtract(DateTime.Now).TotalMinutes;
                 }
                 else
-                    reply.ResponseType = LoginResponseType.InvalidPassword;
+                {
+                    
+                    
+                    BaseRepository.SaveOrUpdate(record);
+                    var account = AccountRepository.GetAccount(info[0], null);
+                    if (account != null)
+                    {
+                        if (account.Locked && !account.Verified)
+                        {
+                            var resetinfo = info[1].Split(':');
+                            if (account.Verificationcode.Equals(resetinfo[0]))
+                            {
+                                account.Locked = false;
+                                account.Verified = true;
+                                account.Password = GetStringSha1Hash(resetinfo[1]);
+                                reply.ResponseType = LoginResponseType.ResetVerified;
+                                BaseRepository.Update(account);
+                            }
+                            else
+                                reply.ResponseType = LoginResponseType.ResetLocked;
+                        }
+                        else if (!account.Locked)
+                        {
+                            if (account.Verified)
+                            {
+                                if (account.Password.Equals(GetStringSha1Hash(info[1])))
+                                {
+                                    BaseRepository.Remove(record);
+                                    reply.AccountId = account.Accountid;
+                                    reply.ResponseType = LoginResponseType.Correct;
+                                    account.Lastloginip = client.Handler.RemoteEndPoint.ToString();
+                                    account.Lastlogintime = DateTime.Today;
+                                    BaseRepository.Update(account);
+                                    client.Account = account;
+                                }
+                                else
+                                    reply.ResponseType = LoginResponseType.InvalidPassword;
+                            }
+                            else
+                            {
+                                if (account.Verificationcode.Equals(info[1]))
+                                {
+                                    account.Verified = true;
+                                    reply.ResponseType = LoginResponseType.AccountVerified;
+                                    BaseRepository.Update(account);
+                                }
+                                else
+                                {
+                                    reply.AccountId = account.Accountid;
+                                    reply.ResponseType = LoginResponseType.AccountNotVerified;
+                                }
+                            }
+                        }
+                        else
+                            reply.ResponseType = LoginResponseType.AccountLocked;
+                    }
+                    else
+                        reply.ResponseType = LoginResponseType.InvalidPassword;
+                }
             }
             catch (Exception e)
             {

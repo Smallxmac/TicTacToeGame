@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using TicTacToeServer.Database;
@@ -14,12 +15,13 @@ namespace TicTacToeServer
 {
     class Program
     {
-        
         static void Main(string[] args)
         {
             Server server = new Server();
             server.StartListening();
             NHibernateHelper.CreateSessionFactory();
+            var golbalThreadManager = new GlobalThreading();
+            golbalThreadManager.StartThreads();
             while (true)
             {
                 Console.Read();

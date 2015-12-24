@@ -6,6 +6,9 @@ using System.Net.Sockets;
 using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
+using TicTacToeServer.Database.Respositorys;
+using TicTacToeServer.Enums;
+using TicTacToeServer.Networking.Packets;
 using TicTacToeServer.Other;
 
 namespace TicTacToeServer.Networking
@@ -64,7 +67,7 @@ namespace TicTacToeServer.Networking
             // Retrieve the state object and the handler socket
             // from the asynchronous state object.
             var client = (SocketClient) ar.AsyncState;
-            Socket handler = client.handler;
+            Socket handler = client.Handler;
             // Read data from the client socket. 
             try
             {
@@ -74,11 +77,45 @@ namespace TicTacToeServer.Networking
                 {
                     if (bytesRead.Equals(bytesExpected))
                     {
-                        client.PacketBuffer = new byte[bytesExpected];
-                        Array.Copy(client.buffer, client.PacketBuffer, bytesExpected);
-                        Handler.HandlePacket(client);
-                        handler.BeginReceive(client.buffer, 0, SocketClient.BufferSize, 0,
+                        if (client.MAddress == null && BitConverter.ToInt16(client.buffer, 0) == 100)
+                        {
+                            client.PacketBuffer = new byte[bytesExpected];
+                            Array.Copy(client.buffer, client.PacketBuffer, bytesExpected);
+                            Handler.HandlePacket(client);
+                            handler.BeginReceive(client.buffer, 0, SocketClient.BufferSize, 0,
                             ReadCallback, client);
+                        }
+                        else if (client.MAddress != null)
+                        {
+                            var record = BlacklistIpsRepository.GetRecordByMac(client.MAddress);
+                            if (record == null || record.BlacklistLiftTime < DateTime.Now)
+                            {
+                                client.PacketBuffer = new byte[bytesExpected];
+                                Array.Copy(client.buffer, client.PacketBuffer, bytesExpected);
+                                Handler.HandlePacket(client);
+                                handler.BeginReceive(client.buffer, 0, SocketClient.BufferSize, 0,
+                                    ReadCallback, client);
+                            }
+                            else
+                            {
+                                var reply = new LoginResponse
+                                {
+                                    ResponseType = LoginResponseType.TooManyTries,
+                                    AccountId = (int) record.BlacklistLiftTime.Subtract(DateTime.Now).TotalMinutes
+                                };
+                                client.Send(reply);
+                                client.Handler.Shutdown(SocketShutdown.Both);
+                                client.Handler.Close(50);
+                            }
+                        }
+                        else
+                        {
+                            var reply = new LoginResponse { ResponseType = LoginResponseType.InvalidMac };
+                            client.Send(reply);
+                            client.Handler.Shutdown(SocketShutdown.Both);
+                            client.Handler.Close(50);
+                        }
+                        
                     }
                     else
                     {
@@ -89,8 +126,8 @@ namespace TicTacToeServer.Networking
             catch (SocketException e)
             {
                 Logger.Error($"Server Error: {e.Message}");
-                client.handler.Shutdown(SocketShutdown.Both);
-                client.handler.Close();
+                client.Handler.Shutdown(SocketShutdown.Both);
+                client.Handler.Close();
             }
         }
     }

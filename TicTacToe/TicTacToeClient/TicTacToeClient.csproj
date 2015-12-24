@@ -90,6 +90,7 @@
     <Compile Include="Networking\Packets\ForgotPasswordRequest.cs" />
     <Compile Include="Networking\Packets\LoginRequest.cs" />
     <Compile Include="Networking\Packets\LoginResponse.cs" />
+    <Compile Include="Networking\Packets\MacAddress.cs" />
     <Compile Include="Networking\Packets\RegisterRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

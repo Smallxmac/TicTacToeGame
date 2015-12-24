@@ -49,6 +49,7 @@
       <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
@@ -75,10 +76,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\Domains\Accounts.cs" />
+    <Compile Include="Database\Domains\BlackListedIps.cs" />
     <Compile Include="Database\Mappings\AccountsMap.cs" />
+    <Compile Include="Database\Mappings\BlackListedIpsMap.cs" />
     <Compile Include="Database\NHibernateHelper.cs" />
     <Compile Include="Database\Respositorys\AccountRepository.cs" />
     <Compile Include="Database\Respositorys\BaseRepository.cs" />
+    <Compile Include="Database\Respositorys\BlacklistIpsRepository.cs" />
     <Compile Include="Enums\LoginResponseType.cs" />
     <Compile Include="Enums\PacketType.cs" />
     <Compile Include="Networking\EmailSender.cs" />
@@ -87,10 +91,12 @@
     <Compile Include="Networking\Packets\ForgotPasswordRequest.cs" />
     <Compile Include="Networking\Packets\LoginRequest.cs" />
     <Compile Include="Networking\Packets\LoginResponse.cs" />
+    <Compile Include="Networking\Packets\MacAddress.cs" />
     <Compile Include="Networking\Packets\RegisterRequest.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Objects\Account.cs" />
     <Compile Include="Objects\SocketClient.cs" />
+    <Compile Include="Other\GlobalThreading.cs" />
     <Compile Include="Other\Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,7 +119,9 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Other\Threads\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

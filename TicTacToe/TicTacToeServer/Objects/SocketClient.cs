@@ -18,22 +18,28 @@ namespace TicTacToeServer.Networking
         public byte[] buffer = new byte[BufferSize];
         public byte[] PacketBuffer;
         
-        public Socket handler;
+        public Socket Handler;
         public Accounts Account;
+        public string MAddress;
 
         public SocketClient(Socket clientSocket)
         {
-            handler = clientSocket;
+            Handler = clientSocket;
         }
+
+        public int LoginAttempt = 0;
 
         public void Send(PacketBuilder packet)
         {
-            handler.BeginSend(packet.Build(), 0, packet.Build().Length, SocketFlags.None, SendCallback, this);
+            Handler.BeginSend(packet.Build(), 0, packet.Build().Length, SocketFlags.None, SendCallback, this);
         }
 
         private void SendCallback(IAsyncResult ar)
         {
-            int bytesSent = handler.EndSend(ar);
+            if(Handler.Connected)
+            {
+                var bytesSent = Handler.EndSend(ar);
+            }
         }
     }
 }

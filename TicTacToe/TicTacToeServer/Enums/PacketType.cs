@@ -8,6 +8,7 @@ namespace TicTacToeServer.Enums
 {
     public enum PacketType : short
     {
+        MaccAddress = 100,
         LoginRequest = 120,
         LoginResponse = 121,
         RegisterRequest = 123,

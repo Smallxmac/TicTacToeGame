@@ -211,6 +211,12 @@ namespace TicTacToeClient.Gui
             _connected = true;
             switch (reply.ResponseTypeType)
             {
+                case LoginResponseType.InvalidMac:
+                    EndLoadingWithMessage("Invalid server connection, No identifier.", "Invalid Connection", MessageBoxIcon.Error);
+                    break;
+                case LoginResponseType.TooManyTries:
+                    EndLoadingWithMessage($"Please try again after {reply.AccountId} minutes, Connections blocked till then.", "Connection Blocked.", MessageBoxIcon.Error);
+                    break;
                 case LoginResponseType.Correct:
                     _logged = true;
                     Loading.Invoke((MethodInvoker)(() => Loading.statusLabel.Text = @"Gather Account Info"));

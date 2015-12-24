@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Windows.Forms;
+using TicTacToeClient.Networking.Packets;
 
 namespace TicTacToeClient.Networking
 {
@@ -36,6 +39,16 @@ namespace TicTacToeClient.Networking
                 client.ClientSocket.EndConnect(ar);
                 client.ClientSocket.BeginReceive(client.Buffer, 0, ClientHandler.BufferSize, 0,
                     ReceiveCallback, client);
+                var macInfo = new MacAddress();
+                var macAddr =
+                (
+                    from nic in NetworkInterface.GetAllNetworkInterfaces()
+                    where nic.OperationalStatus == OperationalStatus.Up
+                    select nic.GetPhysicalAddress().ToString()
+                ).FirstOrDefault();
+
+                macInfo.MAddress = macAddr;
+                client.Send(macInfo);
             }
             catch (Exception e)
             {
@@ -51,7 +64,7 @@ namespace TicTacToeClient.Networking
                 // from the asynchronous state object.
                 var client = (ClientHandler) ar.AsyncState;
 
-                int bytesRead = client.ClientSocket.EndReceive(ar);
+                var bytesRead = client.ClientSocket.EndReceive(ar);
                 var bytesExpected = BitConverter.ToInt16(client.Buffer, 2);
                 if (bytesRead > 0)
                 {
@@ -67,6 +80,14 @@ namespace TicTacToeClient.Networking
                                 ReceiveCallback, client);
                         }
                     }
+                    else
+                    {
+                        //fragment
+                    }
+                }
+                else
+                {
+                    client.ClientSocket.BeginDisconnect(true, DisconnectCallback, client);
                 }
             }
             catch
@@ -74,6 +95,12 @@ namespace TicTacToeClient.Networking
             {
                 MessageBox.Show(e.Message);
             }
+        }
+    
+        private void DisconnectCallback(IAsyncResult ar)
+        {
+            var client = (ClientHandler)ar.AsyncState;
+            client.ClientSocket.EndDisconnect(ar);
         }
     }
 }
