@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using TicTacToeClient.Gui;
-using Menu = TicTacToeClient.Gui.Menu;
+using MainMenu = TicTacToeClient.Gui.MainMenu;
 
 namespace TicTacToeClient
 {
@@ -15,7 +15,7 @@ namespace TicTacToeClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Menu());
+            Application.Run(new MainMenu());
         }
     }
 }

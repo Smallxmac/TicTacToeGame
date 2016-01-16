@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TicTacToeServer.Enums
+﻿namespace TicTacToeServer.Enums
 {
     public enum PacketType : short
     {
@@ -14,6 +8,12 @@ namespace TicTacToeServer.Enums
         RegisterRequest = 123,
         RegisterResponse = 124,
         ForgotPasswordRequest = 125,
-        ForgotPasswordResponse = 126
+        ForgotPasswordResponse = 126,
+
+        ChatMessage = 200,
+        PlayerAssociation = 201,
+        PlayerData = 202,
+        GameInvite = 203,
+
     }
 }

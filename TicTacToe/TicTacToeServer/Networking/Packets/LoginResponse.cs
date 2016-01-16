@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net.NetworkInformation;
 using TicTacToeServer.Database;
 using TicTacToeServer.Database.Respositorys;
 using TicTacToeServer.Enums;
@@ -34,8 +35,11 @@ namespace TicTacToeServer.Networking.Packets
 
         public static void Handle(SocketClient client, LoginResponse response)
         {
-            if (response.ResponseType != LoginResponseType.AccountNotVerified) return;
-            EmailSender.SendWelcomeEmail(AccountRepository.GetAccount(response.AccountId));
+            if (response.ResponseType == LoginResponseType.AccountNotVerified)
+                EmailSender.SendWelcomeEmail(AccountRepository.GetAccount(response.AccountId));
+            
+            if(response.ResponseType == LoginResponseType.AccountInUse)
+                Program.OnlineAccounts[response.AccountId].Disconnect();
         }
     }
 }

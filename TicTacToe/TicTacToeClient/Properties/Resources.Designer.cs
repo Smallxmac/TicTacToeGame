@@ -162,6 +162,69 @@ namespace TicTacToeClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I&apos;m sorry, but we do not allow you to make friends with yourself..
+        /// </summary>
+        internal static string OnlineMenu_AddSelf {
+            get {
+                return ResourceManager.GetString("OnlineMenu_AddSelf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We have lost connection with the server, your account has been logged out. Please try to login again later..
+        /// </summary>
+        internal static string OnlineMenu_Disconnected {
+            get {
+                return ResourceManager.GetString("OnlineMenu_Disconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disconnected From Server.
+        /// </summary>
+        internal static string OnlineMenu_DisconnectedTitle {
+            get {
+                return ResourceManager.GetString("OnlineMenu_DisconnectedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I&apos;m sorry, but you have already added that user..
+        /// </summary>
+        internal static string OnlineMenu_Existing_User {
+            get {
+                return ResourceManager.GetString("OnlineMenu_Existing_User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Invite.
+        /// </summary>
+        internal static string OnlineMenu_GameInviteTitle {
+            get {
+                return ResourceManager.GetString("OnlineMenu_GameInviteTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Friend Request.
+        /// </summary>
+        internal static string OnlineMenu_InvalidFriendRequest {
+            get {
+                return ResourceManager.GetString("OnlineMenu_InvalidFriendRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I&apos;m sorry, but you have entered an invalid username, it must be at least four characters long..
+        /// </summary>
+        internal static string OnlineMenu_RequestShort {
+            get {
+                return ResourceManager.GetString("OnlineMenu_RequestShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password Recovery.
         /// </summary>
         internal static string PasswordRecoveryTitle {

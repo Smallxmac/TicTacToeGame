@@ -8,6 +8,7 @@
         AccountLocked,
         AccountNotVerified,
         AccountVerified,
+        AccountInUse,
         TooManyTries,
         InvalidMac,
 

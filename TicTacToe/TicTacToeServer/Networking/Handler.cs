@@ -23,7 +23,7 @@ namespace TicTacToeServer.Networking
                     LoginRequest.Handel(client, new LoginRequest(client.PacketBuffer), false);
                     break;
                 case PacketType.RegisterRequest:
-                    RegisterRequest.Handle(client, new RegisterRequest(client.buffer));
+                    RegisterRequest.Handle(client, new RegisterRequest(client.Buffer));
                     break;
                 case PacketType.LoginResponse:
                     LoginResponse.Handle(client, new LoginResponse(client.PacketBuffer));
@@ -33,6 +33,9 @@ namespace TicTacToeServer.Networking
                     break;
                 case PacketType.MaccAddress:
                         MacAddress.Handle(client, new MacAddress(client.PacketBuffer));
+                    break;
+                case PacketType.PlayerAssociation:
+                    PlayerAssociation.Handle(client, new PlayerAssociation(client.PacketBuffer));
                     break;
                 default:
                     Logger.Warning($"Unknown packet type {type} from {client.Handler.RemoteEndPoint} with the length of {BitConverter.ToInt16(client.PacketBuffer, 2)}");

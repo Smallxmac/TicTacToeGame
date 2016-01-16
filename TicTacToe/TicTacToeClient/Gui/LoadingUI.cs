@@ -10,21 +10,14 @@ using System.Windows.Forms;
 
 namespace TicTacToeClient.Gui
 {
+    /// <summary>
+    /// Simple loading GUI that is rested on top of loading elements.
+    /// </summary>
     public partial class LoadingUI : Form
     {
         public LoadingUI()
         {
             InitializeComponent();
-            CreateHandle();
-        }
-
-        protected override sealed void CreateHandle()
-        {
-            base.CreateHandle();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
         }
     }
 }

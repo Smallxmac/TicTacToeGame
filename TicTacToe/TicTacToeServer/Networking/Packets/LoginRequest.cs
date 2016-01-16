@@ -98,6 +98,13 @@ namespace TicTacToeServer.Networking.Packets
                             {
                                 if (account.Password.Equals(GetStringSha1Hash(info[1])))
                                 {
+                                    if (Program.OnlineAccounts.ContainsKey(account.Accountid))
+                                    {
+                                        reply.ResponseType = LoginResponseType.AccountInUse;
+                                        reply.AccountId = account.Accountid;
+                                        client.Send(reply);
+                                        return;
+                                    }
                                     BaseRepository.Remove(record);
                                     reply.AccountId = account.Accountid;
                                     reply.ResponseType = LoginResponseType.Correct;
@@ -105,9 +112,11 @@ namespace TicTacToeServer.Networking.Packets
                                     account.Lastlogintime = DateTime.Today;
                                     BaseRepository.Update(account);
                                     client.Account = account;
+                                    client.Send(reply);
+                                    HandleSuccessfulLogin(client);
+                                    return;
                                 }
-                                else
-                                    reply.ResponseType = LoginResponseType.InvalidPassword;
+                                reply.ResponseType = LoginResponseType.InvalidPassword;
                             }
                             else
                             {
@@ -137,6 +146,86 @@ namespace TicTacToeServer.Networking.Packets
                 Logger.Error(e.Message);
             }
             client.Send(reply);
+        }
+
+        private static void HandleSuccessfulLogin(SocketClient client)
+        {
+            Program.OnlineAccounts.TryAdd(client.Account.Accountid, client);
+            var relations = PlayerRelationsRepository.GetAllRelations(client.Account.Accountid);
+            foreach (var relation in relations)
+            {
+                AssociationType relationType;
+                Enum.TryParse(relation.RelationType.ToString(), out relationType);
+                switch (relationType)
+                {
+                    case AssociationType.Friend:
+                    {
+                        var account = AccountRepository.GetAccount(relation.RelationId);
+                            if (account.Accountid == client.Account.Accountid)
+                                account = AccountRepository.GetAccount(relation.AccountId);
+                        if (Program.OnlineAccounts.ContainsKey(account.Accountid))
+                        {
+                            var targetAssossiation = new PlayerAssociation(client.Account.Username.Length)
+                            {
+                                AccountId = client.Account.Accountid,
+                                AssociationExtra = 1,
+                                AssociationType = relation.RelationType,
+                                Username = client.Account.Username
+                            };
+                                Program.OnlineAccounts[account.Accountid].Send(targetAssossiation);
+                        }
+                            var assossiation = new PlayerAssociation(account.Username.Length)
+                        {
+                            AccountId = account.Accountid,
+                            AssociationExtra = (short) (Program.OnlineAccounts.ContainsKey(account.Accountid) ? 1 : 0),
+                            AssociationType = relation.RelationType,
+                            Username = account.Username
+                        };
+                        client.Send(assossiation);
+                        break;
+                    }
+                    case AssociationType.FriendRequest:
+                    {
+                            
+                        if (relation.AccountId != client.Account.Accountid)
+                        {
+                                
+                            var account = AccountRepository.GetAccount(relation.AccountId);
+                                //requesting account
+                            var assossiation = new PlayerAssociation(account.Username.Length)
+                            {
+                                AccountId = client.Account.Accountid,//receiving account
+                                AssociationType = (short) AssociationType.FriendRequest,
+                                Username = account.Username,//requesting account
+                                AssociationExtra = (short) account.Accountid//requesting account
+                            };
+                            client.Send(assossiation);
+                        }
+                        else
+                        {
+                            var account = AccountRepository.GetAccount(relation.RelationId);
+                            var assossiation = new PlayerAssociation(account.Username.Length)
+                            {
+                                AccountId = client.Account.Accountid,
+                                AssociationType = (short) AssociationType.FriendRequest,
+                                Username = account.Username,
+                                AssociationExtra = (short) account.Accountid
+                            };
+                            client.Send(assossiation);
+                        }
+                        break;
+                    }
+
+                }
+                
+            }
+            var data = new PlayerData(client.Account.Username.Length)
+            {
+                AccountId = client.Account.Accountid,
+                Username = client.Account.Username
+            };
+            client.Send(data);
+
         }
 
         internal static string GetStringSha1Hash(string text)

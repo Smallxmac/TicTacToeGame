@@ -54,7 +54,7 @@ namespace TicTacToeServer.Networking
             var listener = (Socket) ar.AsyncState;
             var handler = listener.EndAccept(ar);
             var client = new SocketClient(handler);
-            handler.BeginReceive(client.buffer, 0, SocketClient.BufferSize, 0,
+            handler.BeginReceive(client.Buffer, 0, SocketClient.BufferSize, 0,
                 ReadCallback, client);
             listener.BeginAccept(
                         AcceptCallback,
@@ -72,17 +72,17 @@ namespace TicTacToeServer.Networking
             try
             {
                 int bytesRead = handler.EndReceive(ar);
-                var bytesExpected = BitConverter.ToInt16(client.buffer, 2);
+                var bytesExpected = BitConverter.ToInt16(client.Buffer, 2);
                 if (bytesRead > 0)
                 {
                     if (bytesRead.Equals(bytesExpected))
                     {
-                        if (client.MAddress == null && BitConverter.ToInt16(client.buffer, 0) == 100)
+                        if (client.MAddress == null && BitConverter.ToInt16(client.Buffer, 0) == 100)
                         {
                             client.PacketBuffer = new byte[bytesExpected];
-                            Array.Copy(client.buffer, client.PacketBuffer, bytesExpected);
+                            Array.Copy(client.Buffer, client.PacketBuffer, bytesExpected);
                             Handler.HandlePacket(client);
-                            handler.BeginReceive(client.buffer, 0, SocketClient.BufferSize, 0,
+                            handler.BeginReceive(client.Buffer, 0, SocketClient.BufferSize, 0,
                             ReadCallback, client);
                         }
                         else if (client.MAddress != null)
@@ -91,9 +91,9 @@ namespace TicTacToeServer.Networking
                             if (record == null || record.BlacklistLiftTime < DateTime.Now)
                             {
                                 client.PacketBuffer = new byte[bytesExpected];
-                                Array.Copy(client.buffer, client.PacketBuffer, bytesExpected);
+                                Array.Copy(client.Buffer, client.PacketBuffer, bytesExpected);
                                 Handler.HandlePacket(client);
-                                handler.BeginReceive(client.buffer, 0, SocketClient.BufferSize, 0,
+                                handler.BeginReceive(client.Buffer, 0, SocketClient.BufferSize, 0,
                                     ReadCallback, client);
                             }
                             else
@@ -121,6 +121,10 @@ namespace TicTacToeServer.Networking
                     {
                         //TODO: Fragmented packet.
                     }
+                }
+                else
+                {
+                    client.Disconnect();
                 }
             }
             catch (SocketException e)

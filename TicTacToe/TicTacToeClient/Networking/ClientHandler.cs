@@ -5,7 +5,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using TicTacToeClient.Gui;
+using TicTacToeClient.Networking.Packets;
 
 namespace TicTacToeClient.Networking
 {
@@ -18,8 +20,10 @@ namespace TicTacToeClient.Networking
         public byte[] PacketBuffer;
         public Socket ClientSocket;
         public EventHandler RecivedResponseHandler;
+        public EventHandler RecivedUiPacketHandler;
         public SocketClient Client;
         public Login LoginUi;
+        public OnlineMenu OnMenu;
 
         public void Connect()
         {
@@ -40,6 +44,14 @@ namespace TicTacToeClient.Networking
         private void SendCallback(IAsyncResult ar)
         {
             int bytesSent = ClientSocket.EndSend(ar);
+        }
+
+        public void Disconnect(bool show)
+        {
+            if(show)
+                OnMenu?.Invoke(
+                    (MethodInvoker)(() => OnMenu.Disconnected(show)));
+            ClientSocket.Disconnect(false);
         }
     }
 }

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Drawing;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TicTacToeClient.Entities;
 using TicTacToeClient.Enums;
 using TicTacToeClient.Networking;
 using TicTacToeClient.Networking.Packets;
-using static System.String;
 
 namespace TicTacToeClient.Gui
 {
@@ -22,6 +20,8 @@ namespace TicTacToeClient.Gui
         private readonly ClientHandler _clientHandler;
         public LoadingUI Loading;
         private bool _connected, _logged;
+        private int _accountid;
+        private readonly Player _user = new Player();
 #endregion
 
         /// <summary>
@@ -100,8 +100,10 @@ namespace TicTacToeClient.Gui
                     if (regEmailBox.Text.Contains("@") && regEmailBox.Text.Contains("."))
                     {
                         var registerInfo = new[] { regUsernameBox.Text, regPasswordBox.Text, regEmailBox.Text };
-                        var packet = new RegisterRequest(PacketBuilder.SizeOfStringArray(registerInfo));
-                        packet.RegisterInformation = registerInfo;
+                        var packet = new RegisterRequest(PacketBuilder.SizeOfStringArray(registerInfo))
+                        {
+                            RegisterInformation = registerInfo
+                        };
                         WaitForConnect();
                         Enabled = false;
                         _clientHandler.Connect();
@@ -219,7 +221,7 @@ namespace TicTacToeClient.Gui
                     break;
                 case LoginResponseType.Correct:
                     _logged = true;
-                    Loading.Invoke((MethodInvoker)(() => Loading.statusLabel.Text = @"Gather Account Info"));
+                    _accountid = reply.AccountId;
                     break;
                 case LoginResponseType.AccountLocked:
                     EndLoadingWithMessage(
@@ -265,6 +267,15 @@ namespace TicTacToeClient.Gui
                     if (mbReply == DialogResult.Yes)
                         _clientHandler.Send(reply);
                     break;
+                case LoginResponseType.AccountInUse:
+                    Enabled = true;
+                    Loading.Invoke((MethodInvoker)(() => Loading.Close()));
+                    var mbr = MessageBox.Show(this,
+                        @"Your account is currently online, would you like to disconnect that client?",
+                        @"Account Online", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                    if (mbr == DialogResult.Yes)
+                        _clientHandler.Send(reply);
+                    break;
                 default:
                     EndLoadingWithMessage("This program was not ready for the reply it got: "+ reply.ResponseTypeType, "Invalid Reply", MessageBoxIcon.Error);
                     break;
@@ -299,13 +310,72 @@ namespace TicTacToeClient.Gui
         private async void WaitForConnect()
         {
             Loading = new LoadingUI();
-            Task.Run(new Action(() => Loading.Invoke((MethodInvoker)(() => Loading.ShowDialog(this)))));
+            await Task.Run(new Action(() => Loading.Invoke((MethodInvoker)(() => Loading.ShowDialog(this)))));
             await Task.Delay(5000);
             if (_connected)  return;
-            Loading.Invoke((MethodInvoker) (() => Loading.statusLabel.Text = "Connection Failed\nShutting Down"));
+            Loading.Invoke((MethodInvoker) (() => Loading.statusLabel.Text = @"Connection Failed
+Shutting Down"));
             await Task.Delay(1000);
             Enabled = true;
             Loading.Close();
+        }
+        
+
+        /// <summary>
+        /// Player Associations are sent as the client has been logged in.
+        /// They are handled in the login UI so that they will be present when the 
+        /// Online menu is loaded.
+        /// </summary>
+        /// <param name="playerAssociation">The playerAssociation packet sent</param>
+        public void ReciveAssociation(PlayerAssociation playerAssociation)
+        {
+            switch (playerAssociation.AssociationType)
+            {
+                case (short)AssociationType.Friend:
+                {
+                    var friend = new Player
+                    {
+                        AccountId = playerAssociation.AccountId,
+                        Username = playerAssociation.Username,
+                        Handler = null,
+                        Online = playerAssociation.AssociationExtra == 1
+                    };
+                    _user.Friends.Add(friend.AccountId, friend);
+                    break;
+                }
+                case (short)AssociationType.FriendRequest:
+                {
+                    var pendingFriend = new Player
+                    {
+                        Receiving = playerAssociation.AccountId == _accountid,
+                        Pending = true,
+                        Username = playerAssociation.Username
+                    };
+                    pendingFriend.AccountId = pendingFriend.Receiving
+                        ? playerAssociation.AssociationExtra
+                        : playerAssociation.AccountId;
+                    _user.Friends.Add(pendingFriend.AccountId, pendingFriend);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Player Data is the last item sent from the server during the login process.
+        /// Once this is sent we know that we are able to open the Online Menu.
+        /// </summary>
+        /// <param name="playerData">The Player Data Information.</param>
+        public void RecivePlayerData(PlayerData playerData)
+        {
+            _user.AccountId = playerData.AccountId;
+            _user.Online = true;
+            _user.Username = playerData.Username;
+            _user.Handler = _clientHandler;
+            var menu = new OnlineMenu(_user);
+            menu.Show();
+            Enabled = true;
+            Loading.Invoke((MethodInvoker)(() => Loading.Close()));
+            Hide();
         }
         #endregion
     }

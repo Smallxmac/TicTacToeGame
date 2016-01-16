@@ -10,6 +10,7 @@ namespace TicTacToeClient.Networking
 {
     public class SocketClient
     {
+        public EventHandler Disconnect; 
         public void ConnectClient(ClientHandler clientHandler)
         {
             // Connect to a remote device.
@@ -58,11 +59,12 @@ namespace TicTacToeClient.Networking
 
         private void ReceiveCallback(IAsyncResult ar)
         {
+            var client = (ClientHandler) ar.AsyncState;
             try
             {
                 // Retrieve the state object and the client socket 
                 // from the asynchronous state object.
-                var client = (ClientHandler) ar.AsyncState;
+                
 
                 var bytesRead = client.ClientSocket.EndReceive(ar);
                 var bytesExpected = BitConverter.ToInt16(client.Buffer, 2);
@@ -87,17 +89,21 @@ namespace TicTacToeClient.Networking
                 }
                 else
                 {
-                    client.ClientSocket.BeginDisconnect(true, DisconnectCallback, client);
+                    client.Disconnect(true);
+                    
                 }
             }
             catch
-                (Exception e)
+                (SocketException e)
             {
-                MessageBox.Show(e.Message);
-            }
+                if(e.SocketErrorCode != SocketError.ConnectionReset)
+                    MessageBox.Show(e.Message, e.SocketErrorCode.ToString());
+                else
+                    client.Disconnect(true);
+                }
         }
     
-        private void DisconnectCallback(IAsyncResult ar)
+        public void DisconnectCallback(IAsyncResult ar)
         {
             var client = (ClientHandler)ar.AsyncState;
             client.ClientSocket.EndDisconnect(ar);

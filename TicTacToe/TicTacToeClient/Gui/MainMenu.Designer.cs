@@ -1,6 +1,6 @@
 ﻿namespace TicTacToeClient.Gui
 {
-    partial class Menu
+    partial class MainMenu
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             this.offlineButton = new System.Windows.Forms.Button();
             this.onlineButton = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();

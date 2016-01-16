@@ -66,6 +66,7 @@
             this.Name = "LoadingUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "LoadingUI";
+            this.Load += new System.EventHandler(this.LoadingUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -37,6 +37,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +50,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Player.cs" />
+    <Compile Include="Enums\AssociationType.cs" />
     <Compile Include="Enums\BotDifficulty.cs" />
     <Compile Include="Enums\LoginResponseType.cs" />
     <Compile Include="Enums\PacketType.cs" />
@@ -66,11 +69,11 @@
     <Compile Include="Gui\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Menu.cs">
+    <Compile Include="Gui\MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\Menu.Designer.cs">
-      <DependentUpon>Menu.cs</DependentUpon>
+    <Compile Include="Gui\MainMenu.Designer.cs">
+      <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Gui\GameBoard.cs">
       <SubType>Form</SubType>
@@ -88,9 +91,13 @@
     <Compile Include="Networking\Handler.cs" />
     <Compile Include="Networking\PacketBuilder.cs" />
     <Compile Include="Networking\Packets\ForgotPasswordRequest.cs" />
+    <Compile Include="Networking\Packets\GameInvite.cs" />
     <Compile Include="Networking\Packets\LoginRequest.cs" />
     <Compile Include="Networking\Packets\LoginResponse.cs" />
     <Compile Include="Networking\Packets\MacAddress.cs" />
+    <Compile Include="Networking\Packets\ChatMessage.cs" />
+    <Compile Include="Networking\Packets\PlayerAssociation.cs" />
+    <Compile Include="Networking\Packets\PlayerData.cs" />
     <Compile Include="Networking\Packets\RegisterRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,8 +124,8 @@
     <EmbeddedResource Include="Gui\GameBoard.resx">
       <DependentUpon>GameBoard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\Menu.resx">
-      <DependentUpon>Menu.cs</DependentUpon>
+    <EmbeddedResource Include="Gui\MainMenu.resx">
+      <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

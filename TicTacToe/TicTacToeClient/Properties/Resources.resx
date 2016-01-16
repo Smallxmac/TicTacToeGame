@@ -190,4 +190,25 @@
   <data name="Preloader_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Preloader_2.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="OnlineMenu_Existing_User" xml:space="preserve">
+    <value>I'm sorry, but you have already added that user.</value>
+  </data>
+  <data name="OnlineMenu_AddSelf" xml:space="preserve">
+    <value>I'm sorry, but we do not allow you to make friends with yourself.</value>
+  </data>
+  <data name="OnlineMenu_InvalidFriendRequest" xml:space="preserve">
+    <value>Invalid Friend Request</value>
+  </data>
+  <data name="OnlineMenu_RequestShort" xml:space="preserve">
+    <value>I'm sorry, but you have entered an invalid username, it must be at least four characters long.</value>
+  </data>
+  <data name="OnlineMenu_Disconnected" xml:space="preserve">
+    <value>We have lost connection with the server, your account has been logged out. Please try to login again later.</value>
+  </data>
+  <data name="OnlineMenu_DisconnectedTitle" xml:space="preserve">
+    <value>Disconnected From Server</value>
+  </data>
+  <data name="OnlineMenu_GameInviteTitle" xml:space="preserve">
+    <value>Game Invite</value>
+  </data>
 </root>
