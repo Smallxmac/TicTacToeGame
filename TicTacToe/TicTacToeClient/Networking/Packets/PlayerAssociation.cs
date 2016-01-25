@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicTacToeClient.Enums;
+﻿using TicTacToeClient.Enums;
 
 namespace TicTacToeClient.Networking.Packets
 {
+    /// <summary>
+    /// Packet used to list and add/approve/remove friends from players friends list.
+    /// Server Send and Receive
+    /// Client Send and Receive 
+    /// </summary>
     public class PlayerAssociation : PacketBuilder
     {
         public PlayerAssociation(int length) : base(PacketType.PlayerAssociation, length+12)

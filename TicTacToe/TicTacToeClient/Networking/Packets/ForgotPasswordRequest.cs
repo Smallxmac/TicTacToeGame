@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicTacToeClient.Enums;
+﻿using TicTacToeClient.Enums;
 
 namespace TicTacToeClient.Networking.Packets
 {
+    /// <summary>
+    /// Information sent to the server once the client has requested his password be reset.
+    /// Server Receive
+    /// Client Send.
+    /// </summary>
     public class ForgotPasswordRequest : PacketBuilder
     {
         public ForgotPasswordRequest(int length) : base(PacketType.ForgotPasswordRequest, length)

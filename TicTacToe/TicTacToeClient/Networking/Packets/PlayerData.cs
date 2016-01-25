@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicTacToeClient.Enums;
+﻿using TicTacToeClient.Enums;
 
 namespace TicTacToeClient.Networking.Packets
 {
+    /// <summary>
+    /// Player data is sent once an account is fully logged in and contains useful information of from that account.
+    /// Server Send
+    /// Client Receive
+    /// </summary>
     public class PlayerData : PacketBuilder
     {
         public PlayerData(int length) : base(PacketType.PlayerData, length + 8)

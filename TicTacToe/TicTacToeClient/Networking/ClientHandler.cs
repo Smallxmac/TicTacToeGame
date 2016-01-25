@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TicTacToeClient.Gui;
-using TicTacToeClient.Networking.Packets;
 
 namespace TicTacToeClient.Networking
 {
     public class ClientHandler
     {
+        #region Vars
         // Size of receive buffer.
         public static int BufferSize = 1024;
         // Receive buffer.
@@ -24,7 +19,11 @@ namespace TicTacToeClient.Networking
         public SocketClient Client;
         public Login LoginUi;
         public OnlineMenu OnMenu;
+#endregion
 
+        /// <summary>
+        /// Method used to connect to the sever, sometime is called when already connected so it will not connect again.
+        /// </summary>
         public void Connect()
         {
             if(ClientSocket != null)
@@ -35,17 +34,20 @@ namespace TicTacToeClient.Networking
             Client.ConnectClient(this);
         }
 
+        /// <summary>
+        /// Sends a prebuilt packet to the sever by using the packet's build method. 
+        /// </summary>
+        /// <param name="packet"></param>
         public void Send(PacketBuilder packet)
         {
-            if(ClientSocket.Connected)
-                ClientSocket.BeginSend(packet.Build(), 0, packet.Build().Length, SocketFlags.None, SendCallback, this);
+            if (ClientSocket.Connected)
+                ClientSocket.Send(packet.Build(), SocketFlags.None);
         }
 
-        private void SendCallback(IAsyncResult ar)
-        {
-            int bytesSent = ClientSocket.EndSend(ar);
-        }
-
+        /// <summary>
+        /// This tells the client to disconnect from the server, or if the connection was reset.
+        /// </summary>
+        /// <param name="show">If true it will show a message saying the server has been disconnected from.</param>
         public void Disconnect(bool show)
         {
             if(show)

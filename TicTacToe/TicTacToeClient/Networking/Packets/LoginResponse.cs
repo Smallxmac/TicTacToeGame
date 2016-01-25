@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicTacToeClient.Enums;
+﻿using TicTacToeClient.Enums;
 
 namespace TicTacToeClient.Networking.Packets
 {
+    /// <summary>
+    /// Packet sent from the server to update the status of the login request.
+    /// Server Send
+    /// Client Receive
+    /// </summary>
     public class LoginResponse : PacketBuilder
     {
         public LoginResponse(int length) : base(PacketType.LoginResponse, length)
@@ -18,7 +18,7 @@ namespace TicTacToeClient.Networking.Packets
         }
 
         private int _accountId;
-        private Enums.LoginResponseType _responseTypeType;
+        private LoginResponseType _responseTypeType;
 
         public int AccountId
         {
@@ -28,9 +28,9 @@ namespace TicTacToeClient.Networking.Packets
 
         }
 
-        public Enums.LoginResponseType ResponseTypeType
+        public LoginResponseType ResponseTypeType
         {
-            get { _responseTypeType = (Enums.LoginResponseType) ReadByte(8); return _responseTypeType; }
+            get { _responseTypeType = (LoginResponseType) ReadByte(8); return _responseTypeType; }
             set { WriteByte((byte) value, 8); _responseTypeType = value; }
         }
     }

@@ -11,9 +11,13 @@ namespace TicTacToeClient.Networking
     public class SocketClient
     {
         public EventHandler Disconnect; 
+
+        /// <summary>
+        /// Method used to connect a clientHandler to the server in the settings.
+        /// </summary>
+        /// <param name="clientHandler">Client handler with unused Socket</param>
         public void ConnectClient(ClientHandler clientHandler)
         {
-            // Connect to a remote device.
             try
             {
                 IPAddress ipAddress = IPAddress.Parse(Properties.Settings.Default.IP);
@@ -26,10 +30,16 @@ namespace TicTacToeClient.Networking
             }
             catch (Exception e)
             {
+                //TODO: Add a error mode for developers using this.
                 Console.WriteLine(e.ToString());
             }
         }
 
+        /// <summary>
+        /// Once a client is connect this callback will be reached.
+        /// Client sends the mac address to the server at this time.
+        /// </summary>
+        /// <param name="ar">Results from the connection.</param>
         private void ConnectCallback(IAsyncResult ar)
         {
             try
@@ -57,17 +67,21 @@ namespace TicTacToeClient.Networking
             }
         }
 
-        private void ReceiveCallback(IAsyncResult ar)
+        /// <summary>
+        /// When data comes in from an active connection it reads the data,
+        /// then passes it onto the handler.
+        /// </summary>
+        /// <param name="ar">Async Result</param>
+        private static void ReceiveCallback(IAsyncResult ar)
         {
             var client = (ClientHandler) ar.AsyncState;
             try
-            {
-                // Retrieve the state object and the client socket 
-                // from the asynchronous state object.
-                
-
+            { 
+                //Data received
                 var bytesRead = client.ClientSocket.EndReceive(ar);
+                //Data expected
                 var bytesExpected = BitConverter.ToInt16(client.Buffer, 2);
+
                 if (bytesRead > 0)
                 {
                     if (bytesRead.Equals(bytesExpected))
@@ -84,7 +98,8 @@ namespace TicTacToeClient.Networking
                     }
                     else
                     {
-                        //fragment
+                        //TODO: Handle a packet that is incomplete.
+
                     }
                 }
                 else
@@ -103,6 +118,11 @@ namespace TicTacToeClient.Networking
                 }
         }
     
+        /// <summary>
+        /// Callback for the socket disconnect.
+        /// Does not do anything as of yet.
+        /// </summary>
+        /// <param name="ar">Results of the Disconnect</param>
         public void DisconnectCallback(IAsyncResult ar)
         {
             var client = (ClientHandler)ar.AsyncState;

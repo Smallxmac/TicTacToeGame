@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using TicTacToeClient.Enums;
 using TicTacToeClient.Networking.Packets;
@@ -8,6 +7,10 @@ namespace TicTacToeClient.Networking
 {
     class Handler
     {
+        /// <summary>
+        /// Method used to determine how a packet is handled by the client.
+        /// </summary>
+        /// <param name="client">ClientHandler that contains packet data.</param>
         public static void HandlePacket(ClientHandler client)
         {
             var type = (PacketType) BitConverter.ToInt16(client.PacketBuffer, 0);

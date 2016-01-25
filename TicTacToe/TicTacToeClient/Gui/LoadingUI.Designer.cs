@@ -42,7 +42,6 @@
             this.statusLabel.Size = new System.Drawing.Size(101, 13);
             this.statusLabel.TabIndex = 0;
             this.statusLabel.Text = "Contacting Server...";
-            this.statusLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // pictureBox1
             // 
@@ -66,7 +65,6 @@
             this.Name = "LoadingUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "LoadingUI";
-            this.Load += new System.EventHandler(this.LoadingUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

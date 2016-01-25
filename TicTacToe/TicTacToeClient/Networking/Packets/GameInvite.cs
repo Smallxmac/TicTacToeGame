@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicTacToeClient.Enums;
+﻿using TicTacToeClient.Enums;
 
 namespace TicTacToeClient.Networking.Packets
 {
+    /// <summary>
+    /// Packet sent to tell the server to invite people or to have a pending invite.
+    /// Server Send and Receive
+    /// Client Send and Receive
+    /// </summary>
     public class GameInvite : PacketBuilder
     {
         public GameInvite(int length) : base(PacketType.GameInvite, length+18)

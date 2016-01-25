@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicTacToeClient.Enums;
+﻿using TicTacToeClient.Enums;
 
 namespace TicTacToeClient.Networking.Packets
 {
+    /// <summary>
+    /// Packet sent in the connection process to tell the server who you are
+    /// Server Receive
+    /// Client Send
+    /// </summary>
     public class MacAddress : PacketBuilder
     {
         public MacAddress() : base(PacketType.MaccAddress, 13)

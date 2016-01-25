@@ -7,6 +7,11 @@ using TicTacToeClient.Enums;
 
 namespace TicTacToeClient.Networking.Packets
 {
+    /// <summary>
+    /// Used to communicate message details between users and other users.
+    /// Server Send and Receive
+    /// Client Send and Receive
+    /// </summary>
     public class ChatMessage : PacketBuilder
     {
         public ChatMessage(int lengthOfStringArray) : base(PacketType.ChatMessage, 13+lengthOfStringArray)
